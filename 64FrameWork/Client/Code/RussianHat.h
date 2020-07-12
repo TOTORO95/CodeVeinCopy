@@ -11,6 +11,7 @@ class CIceSword;
 
 class CSplashEffect;
 class CChargeEffect;
+class CExplosionEffect;
 class CRussianHat : public CDynamicObject
 {
 public:
@@ -75,6 +76,8 @@ private://Pattern
 	void					Off_ChargeEffect(_float fTimeDelta);
 	void					On_KetsugiEffect(_float fTimeDelta);
 	void					Off_KetsugiEffect(_float fTimeDelta);
+	void					On_ExplosionEffect(_float fTimeDelta);
+	void					Off_ExplosionEffect(_float fTimeDelta);
 
 	//패턴 추가할것 원거리 마법 ,얼음검 휘두르기 
 
@@ -99,11 +102,13 @@ private:
 	_uint						m_uiHoneIdx = 0;
 	CIceSword*					m_pSword = nullptr;
 	_float						m_fEffectRate = 0.f;
-	_uint						m_uiEffectIdx= 0.f;
+	_uint						m_uiEffectIdx = 0;
 	_bool						m_bIsSplash = false;
-	CSplashEffect*				m_pSplashEffect[5] = { nullptr, };
+	CSplashEffect*				m_pSplashEffect[6] = { nullptr, };
 	CChargeEffect*				m_pChargeEffect[3] = { nullptr, };
+	CExplosionEffect*			m_pExplosionEffect[2] = { nullptr, };
 	_bool						m_bIsCharge = false;
+	_bool						m_bIsExplosion = false;
 
 
 private:

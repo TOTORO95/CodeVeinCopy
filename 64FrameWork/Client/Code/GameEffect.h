@@ -76,7 +76,6 @@ protected:
 	_bool					m_bVertical = false;
 	_float					m_fVerticalPos = 0.f;
 	_float					m_fVerticalTime = 0.f;
-
 public:
 	static CGameEffect*		Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName,  _vec2 vScale,_vec3 vPos, _bool bIsLoop);
 	static CGameEffect*		Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, wstring wstrParentInstName, string strBoneName, _vec2 vScale = { 1.f,1.f }, _vec3 vPos = { 0.f,0.f,0.f });

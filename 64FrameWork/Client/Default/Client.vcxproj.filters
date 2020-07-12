@@ -202,6 +202,15 @@
     <Filter Include="02. GameObejct\02. Public\06. GameEffect\StdEffect">
       <UniqueIdentifier>{932e6709-ef31-4cec-a501-a74c8b6aeef9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObejct\02. Public\06. GameEffect\ExplosionEffect">
+      <UniqueIdentifier>{761efb4f-3881-45ff-9e5f-3a85109db073}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObejct\02. Public\06. GameEffect\GoundEffect">
+      <UniqueIdentifier>{7c97522d-993e-4357-8ab8-20686f3ecef1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObejct\02. Public\06. GameEffect\HitEffect">
+      <UniqueIdentifier>{c70ecd99-2d0a-4b07-867e-f6cecc1baa4e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -381,6 +390,15 @@
     <ClInclude Include="..\Code\ChargeEffect.h">
       <Filter>02. GameObejct\02. Public\06. GameEffect\ChargeEffect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\ExplosionEffect.h">
+      <Filter>02. GameObejct\02. Public\06. GameEffect\ExplosionEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GroundEffect.h">
+      <Filter>02. GameObejct\02. Public\06. GameEffect\GoundEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\HitEffect.h">
+      <Filter>02. GameObejct\02. Public\06. GameEffect\HitEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -556,6 +574,15 @@
     </ClCompile>
     <ClCompile Include="..\Code\ChargeEffect.cpp">
       <Filter>02. GameObejct\02. Public\06. GameEffect\ChargeEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ExplosionEffect.cpp">
+      <Filter>02. GameObejct\02. Public\06. GameEffect\ExplosionEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GroundEffect.cpp">
+      <Filter>02. GameObejct\02. Public\06. GameEffect\GoundEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\HitEffect.cpp">
+      <Filter>02. GameObejct\02. Public\06. GameEffect\HitEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -19,6 +19,7 @@
 #include "BoostEffect.h"
 #include "GameEffect.h"
 #include "SplashEffect.h"
+#include "HitEffect.h"
 //#include "SoundMgr.h"
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -210,13 +211,21 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar* pLayerTag)
 		NULL_CHECK_RETURN(pGameObject, E_FAIL);
 		FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Shield", pGameObject), E_FAIL);
 
-		//pGameObject = CSplashEffect::Create(m_pGraphicDev, L"TC5RadialGradient09", L"RussianHat_0", "LeftHand", _vec2(3.f, 3.f), _vec3(0.f, 0.f, 0.f), false, true);
+
+
+		//pGameObject = CHitEffect::Create(m_pGraphicDev, L"T_FX_Flash", _vec2(0.4f, 0.4f), _vec3(0.069f, 6.208f, -56.f), 2.f, 7.f,2);
+		//NULL_CHECK_RETURN(pGameObject, E_FAIL);
+		//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"T_FX_Flash", pGameObject), E_FAIL);
+
+		//pGameObject = CHitEffect::Create(m_pGraphicDev, L"Ring", _vec2(1.f,1.f), _vec3(0.069f, 6.208f, -56.f), 1.5f, 5.f,1);
+		//NULL_CHECK_RETURN(pGameObject, E_FAIL);
+		//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"T_FX_Flash2", pGameObject), E_FAIL);
+
+
+
+		//pGameObject = CGameEffect::Create(m_pGraphicDev, L"TC5RadialGradient09", _vec2(1.f, 1.f),_vec3(0.069f, 6.208f, -56.f),true);
 		//NULL_CHECK_RETURN(pGameObject, E_FAIL);
 		//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"SmokeTest", pGameObject), E_FAIL);
-
-		pGameObject = CGameEffect::Create(m_pGraphicDev, L"TC5RadialGradient09", _vec2(1.f, 1.f),_vec3(0.069f, 6.208f, -56.f),true);
-		NULL_CHECK_RETURN(pGameObject, E_FAIL);
-		FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"SmokeTest", pGameObject), E_FAIL);
 
 
 		//_float fTestY = -1.f;

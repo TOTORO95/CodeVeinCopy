@@ -229,9 +229,9 @@ void CSplashEffect::Splash_Scale(_float fTimeDelta, _float fMaxScale)
 	if (fMaxScale >= m_fSplashScale)
 	{
 		if(m_bVertical)
-			m_fSplashScale += fTimeDelta*fMaxScale;
+			m_fSplashScale += fTimeDelta*fMaxScale*m_fSCTimeSpeed;
 		else
-			m_fSplashScale += fTimeDelta*fMaxScale;
+			m_fSplashScale += fTimeDelta*fMaxScale*m_fSCTimeSpeed;
 		m_vMultiScale.x = m_fSplashScale;
 		m_vMultiScale.y = m_fSplashScale;
 	}
@@ -324,8 +324,6 @@ void CSplashEffect::Set_Enable(bool bEnable, _vec3 vAddPos)
 		m_fSplashScale = 0.f;
 		if (m_bIsParent)
 		{
-	
-			
 			m_pTransformCom->Set_ParentMatrix(&(*m_pParentBoneMatrix * *m_pParentWorldMatrix));
 			m_pTransformCom->Get_WorldMatrix(&m_OldMatrix);
 			memcpy(m_vPos, &m_OldMatrix._41, sizeof(_vec3));
@@ -340,6 +338,11 @@ void CSplashEffect::Set_Enable(bool bEnable, _vec3 vAddPos)
 
 	}
 
+}
+
+void CSplashEffect::Set_ScaleSpeed(_float fTimeSpeed)
+{
+	m_fSCTimeSpeed = fTimeSpeed;
 }
 
 

@@ -538,8 +538,44 @@ _bool CLoading::Loading_Basic()
 		Engine::TEX_NORMAL,
 		L"../../Resource/Texture/Effect/Ring/Ring%d.png", 16),
 		E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"Explosion",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/Effect/Explosion/Explosion%d.png", 36),
+		E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"TC5GunSandSplash01",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/Effect/Texture/TC_Alpha/T_FX_TC5GunSandSplash01.tga"),
+		E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"Slash",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/Effect/slash_Test.tga"),
+		E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"T_FX_Flash",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/Effect/T_FX_Flash.tga"),
+		E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"Slash2",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/Effect/Slash2/Slash2_%d.png",19),
+		E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"Slash3",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/Effect/Slash3/Slash3_%d.png", 5),
+		E_FAIL);
 
-
+	//T_FX_TC5GunSandSplash01
 
 	FAILED_CHECK_RETURN(Engine::Ready_Meshes(m_pGraphicDev,
 		RESOURCE_STAGE,

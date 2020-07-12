@@ -5,11 +5,12 @@
 
 
 
-CChargeEffect::CChargeEffect(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, wstring wstrParentInstName, string strBoneName, _vec2 vScale, _vec3 vPos, _bool bIsTraking, _bool bIsDistortion)
+CChargeEffect::CChargeEffect(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, wstring wstrParentInstName, string strBoneName, _vec2 vScale, _vec3 vPos, _bool bIsTraking, _bool bIsDistortion, _float fMaxScale)
 	: CGameEffect(pGraphicDev, wstrTexName, wstrParentInstName, strBoneName, vScale, vPos), m_bIsDistortion(bIsDistortion)
 {
 	m_fVerticalTime = 0.f;
 	m_bIsTracking=bIsTraking;
+	m_fMaxScale=fMaxScale;
 }
 
 CChargeEffect::~CChargeEffect(void)
@@ -70,8 +71,8 @@ _int CChargeEffect::Update_GameObject(const _float& fTimeDelta)
 		memcpy(m_vPos, &m_OldMatrix._41, sizeof(_vec3));
 	}
 	
-	Charge_Scale(fTimeDelta, 2.5f);
-
+	Charge_Scale(fTimeDelta, m_fMaxScale);
+	cout << m_vMultiScale.x << endl;
 	if (m_bIsTracking)
 	{
 		m_OldMatrix = (*m_pParentBoneMatrix * *m_pParentWorldMatrix);
@@ -212,8 +213,12 @@ void CChargeEffect::Charge_Scale(_float fTimeDelta, _float fMaxScale)
 		m_vMultiScale.x = m_fSplashScale;
 		m_vMultiScale.y = m_fSplashScale;
 	}
+	if (fMaxScale < m_fSplashScale)
+	{
+		m_vMultiScale.x = m_fSplashScale;
+		m_vMultiScale.y = m_fSplashScale;
 
-
+	}
 
 }
 
@@ -224,19 +229,17 @@ void CChargeEffect::Set_Distortion()
 
 void CChargeEffect::VerticalMove(_float fTimeDelta)
 {
+	if (180.f >= m_fVerticalTime)
+	{
+		m_fVerticalTime += fTimeDelta*180.f;
+		m_fVerticalPos = sinf(D3DXToRadian(m_fVerticalTime));
 
+	}
+	else
+	{
+		m_fVerticalTime = 0.f;
 
-		if (180.f >= m_fVerticalTime)
-		{
-			m_fVerticalTime += fTimeDelta*180.f;
-
-			m_fVerticalPos = sinf(D3DXToRadian(m_fVerticalTime));
-		}
-		else
-		{
-			m_fVerticalTime = 0.f;
-
-		}
+	}
 }
 
 void CChargeEffect::Set_Enable(bool bEnable)
@@ -280,7 +283,7 @@ void CChargeEffect::Set_Enable(bool bEnable, _vec3 vAddPos)
 				memcpy(m_vPos, &m_OldMatrix._41, sizeof(_vec3));
 			}
 			m_vAddPos = vAddPos;
-			m_vAddPos *= 25.f;
+			m_vAddPos *= 35.f;
 
 		}
 
@@ -293,9 +296,9 @@ void CChargeEffect::Set_Enable(bool bEnable, _vec3 vAddPos)
 }
 
 
-CChargeEffect * CChargeEffect::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, wstring wstrParentInstName, string strBoneName, _vec2 vScale, _vec3 vPos, _bool bIsTraking, _bool bIsDistortion)
+CChargeEffect * CChargeEffect::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, wstring wstrParentInstName, string strBoneName, _vec2 vScale, _vec3 vPos, _bool bIsTraking, _bool bIsDistortion, _float fMaxScale)
 {
-	CChargeEffect*	pInstance = new CChargeEffect(pGraphicDev, wstrTexName, wstrParentInstName, strBoneName, vScale, vPos, bIsTraking,bIsDistortion);
+	CChargeEffect*	pInstance = new CChargeEffect(pGraphicDev, wstrTexName, wstrParentInstName, strBoneName, vScale, vPos, bIsTraking,bIsDistortion, fMaxScale);
 
 	if (FAILED(pInstance->Ready_GameObject()))
 		Engine::Safe_Release(pInstance);

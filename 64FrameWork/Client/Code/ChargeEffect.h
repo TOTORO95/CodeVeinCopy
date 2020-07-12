@@ -17,7 +17,7 @@ END
 class CChargeEffect : public CGameEffect
 {
 private:
-	explicit CChargeEffect(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, wstring wstrParentInstName, string strBoneName, _vec2 vScale, _vec3 vPos, _bool bIsTraking,_bool bIsDistortion);
+	explicit CChargeEffect(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, wstring wstrParentInstName, string strBoneName, _vec2 vScale, _vec3 vPos, _bool bIsTraking,_bool bIsDistortion,_float fMaxScale);
 	virtual ~CChargeEffect(void);
 
 public:
@@ -50,7 +50,8 @@ public:
 												_vec2 vScale = { 1.f,1.f },
 												_vec3 vPos = { 0.f,0.f,0.f }, 
 												_bool bIsTraking=false, 
-												_bool bIsDistortion = false);
+												_bool bIsDistortion = false,
+												_float fMaxScale=2.5f);
 
 private:
 	_float		m_fSplashScale = 0.f;
@@ -60,6 +61,7 @@ private:
 	_float		m_fEndTime = 0.f;
 	_float		m_fSCTimeSpeed = 1.f;
 	_bool		m_bIsStart = false;
+	_float		m_EndScale = 1.f;
 private:
 	virtual void Free(void) override;
 };

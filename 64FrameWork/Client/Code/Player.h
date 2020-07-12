@@ -29,6 +29,10 @@ class CPortal;
 class CPortalSub;
 
 
+class CSplashEffect;
+class CChargeEffect;
+class CExplosionEffect;
+class CGroundEffect;
 class CPlayer : public Engine::CGameObject
 {
 private:
@@ -52,6 +56,10 @@ public:
 	_bool							ChangeScene() {return m_bIsSceneChangeFlag;}
 private:
 	HRESULT				Add_Component(void);
+	HRESULT				Ready_Effect(void);
+
+
+
 	void				Key_Input(const _float& fTimeDelta);
 	HRESULT				SetUp_ConstantTable(LPD3DXEFFECT& pEffect);
 	HRESULT				Load_Text(const TCHAR * pFilePath);
@@ -86,6 +94,15 @@ private:
 	void				AddItem_Inventory(wstring wstrName);
 	void				DeleteItem_Inventory(wstring wstrName);
 	void				EnhanceItem_Inventory(wstring wstrName);
+
+	_vec3				Get_Look();
+	//effect
+	void					SplashEffect();
+
+	void					On_ChargeEffect(_float fTimeDelta);
+	void					Off_ChargeEffect();
+	void					On_ExplosionEffect(_float fTimeDelta);
+	void					Off_ExplosionEffect(_float fTimeDelta);
 private:
 	Engine::CTexture*		m_pNoiseTextureCom = nullptr;
 
@@ -151,8 +168,15 @@ private:
 	_bool					m_bIsShop = false;
 	vector<pair<wstring, _uint>>		m_InventoryVec;
 
-
-
+	//Effect
+	_uint						m_uiEffectIdx = 0;
+	CChargeEffect*				m_pChargeEffect[2] = { nullptr, };
+	_bool						m_bIsCharge = false;
+	CExplosionEffect*			m_pExplosionEffect[2] = { nullptr, };
+	_bool						m_bIsExplosion = false;
+	CSplashEffect*				m_pSplashEffect[2] = { nullptr, };
+	_bool						m_bIsSplash = false;
+	CGroundEffect*				m_pGroundEffect[2] = { nullptr, };
 public:
 	static CPlayer*		Create(LPDIRECT3DDEVICE9 pGraphicDev, _uint uiIdx=0, _uint uiStageIdx = 0);
 

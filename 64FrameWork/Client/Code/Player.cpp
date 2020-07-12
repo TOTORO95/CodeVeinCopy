@@ -15,7 +15,11 @@
 #include "Sword.h"
 #include "Portal.h"
 #include "PortalSub.h"
-
+#include "SplashEffect.h"
+#include "ChargeEffect.h"
+#include "ExplosionEffect.h"
+#include "GroundEffect.h"
+#include "HitEffect.h"
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev, _uint uiIdx,_uint uiStageIdx)
 	: Engine::CGameObject(pGraphicDev)
 {
@@ -181,20 +185,27 @@ HRESULT CPlayer::LateReady_GameObject(void)
 	for( int i=0; i>3 ; i++)
 		m_pSword[i]->Set_Enable(false);
 
-	//m_pHalberd->Set_Enable(false);
-	//m_pHalberd->Set_EquipObject(L"Player");
-	/*
-	pGameObject  = C3DButton::Create(m_pGraphicDev, L"Select", 1.9f, 40.f);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Shop_Sub_Select", pGameObject), E_FAIL);
-*/
 
+	//effect
+	Ready_Effect();
 
 	return S_OK;
 }
 
 _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 {
+	if (m_pKeyMgr->KeyDown(KEY_NUM2))
+	{
+		m_pGroundEffect[0]->Set_Enable(true);
+		SplashEffect();
+		//On_ChargeEffect(fTimeDelta);
+	}
+	if (m_pKeyMgr->KeyDown(KEY_NUM3))
+	{
+		m_pGroundEffect[0]->Set_Enable(false);
+		//Off_ChargeEffect(fTimeDelta);
+		m_bIsSplash = false;
+	}
 	if (m_pKeyMgr->KeyDown(KEY_U))
 	{
 
@@ -227,11 +238,18 @@ _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 			SetColliderEnable(0.175f, 0.2f);
 			SetColliderEnable(0.225f, 0.25f);
 			SetColliderEnable(0.275f, 0.3f);
+			if (Get_AniRatio() >= 0.3f)
+			{
+				SplashEffect();
+				Off_ChargeEffect();
+			}
 		}
 	}
 
 	if (m_eCurState == OBJ_DODGE)
 	{
+		m_bIsSplash = false;
+
 		if (Get_AniRatio() <= 0.3f)
 			m_pColliderGroupCom->Set_ColliderEnable(Engine::COLOPT_HURT, false);
 		else
@@ -239,8 +257,8 @@ _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 	}
 
 
-	//_vec3 vPos = *m_pTransformCom->Get_Info(Engine::INFO_POS);
-	//cout << "X=" << vPos.x << "y=" << vPos.y << "Z=" << vPos.z << endl;
+	_vec3 vPos = *m_pTransformCom->Get_Info(Engine::INFO_POS);
+	cout << "X=" << vPos.x << "y=" << vPos.y << "Z=" << vPos.z << endl;
 	//cout << "Cur Cell " << m_pNaviCom->Get_CurIndex() << endl;
 	//Guard_H(fTimeDelta);
 
@@ -356,6 +374,51 @@ HRESULT CPlayer::Add_Component(void)
 	//	m_pMeshCom->Get_Stride());
 	//NULL_CHECK_RETURN(pComponent, E_FAIL);
 	//m_pComponentMap[Engine::ID_STATIC].emplace(L"Com_Collider", pComponent);
+
+	return S_OK;
+}
+
+HRESULT CPlayer::Ready_Effect(void)
+{
+	//CHARA_OFFSET 
+	//RightHandAttach
+
+	Engine::CGameObject* pGameObject = nullptr;
+	Engine::CLayer* pLayer = Engine::Get_Layer(L"GameLogic");
+
+	pGameObject = m_pChargeEffect[0] = CChargeEffect::Create(m_pGraphicDev, L"TC5RadialGradient09", L"Player", "RightHandAttach", _vec2(0.125f, 0.125f), _vec3(INIT_VEC3), true, false,4.f);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_ChargeEffect1", pGameObject), E_FAIL);
+	m_pChargeEffect[0]->Set_ChargeSpeed(2.f);
+
+	pGameObject = m_pChargeEffect[1] = CChargeEffect::Create(m_pGraphicDev, L"Shine", L"Player", "RightHandAttach", _vec2(0.125f, 0.125f), _vec3(INIT_VEC3), true, true,4.f);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_ChargeEffect2", pGameObject), E_FAIL);
+	m_pChargeEffect[1]->Set_ChargeSpeed(2.f);
+
+
+
+	pGameObject = m_pSplashEffect[0] = CSplashEffect::Create(m_pGraphicDev, L"TC5GunSandSplash01", L"Player", "CHARA_OFFSET", _vec2(1.f, 1.f), _vec3(0.f, -2.f, 0.f), false, true);
+	m_pSplashEffect[0]->Set_ScaleSpeed(5.f);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_Splash_01", pGameObject), E_FAIL);
+
+	pGameObject = m_pSplashEffect[1] = CSplashEffect::Create(m_pGraphicDev, L"RussianHat_Shield_Splash_02", L"Player", "CHARA_OFFSET", _vec2(1.5f, 1.5f), _vec3(0.f, -2.f, 0.f), false, true);
+	m_pSplashEffect[1]->Set_ScaleSpeed(5.f);
+	dynamic_cast<CSplashEffect*>(pGameObject)->Set_Distortion();
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_Splash_02", pGameObject), E_FAIL);
+
+
+
+	pGameObject = m_pGroundEffect[0] = CGroundEffect::Create(m_pGraphicDev, L"Ring", L"Player", "CHARA_OFFSET", _vec2(1.f, 1.f), _vec3(0.f, 0.f, 0.f), false, true);
+	m_pGroundEffect[0]->Set_ScaleSpeed(5.f);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_Ground_01", pGameObject), E_FAIL);
+
+
+
+
 
 	return S_OK;
 }
@@ -505,6 +568,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 
 	if (m_pKeyMgr->KeyPressing(KEY_RBUTTON))
 	{
+		On_ChargeEffect(fTimeDelta);
 		m_eCurState = OBJ_STRONG_ATTACK;
 
 		m_pMeshCom->Set_AnimationSet(28);
@@ -513,14 +577,17 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 	}
 	if (m_pKeyMgr->KeyUp(KEY_RBUTTON))
 	{
+
 		if (m_fChargeTime >= 0.75f)
 		{
 			m_eCurState = OBJ_CHARGE_ATTACK;
-
+			
 		}
 		else
+		{
 			m_eCurState = OBJ_STRONG_ATTACK;
-
+			Off_ChargeEffect();
+		}
 	}
 	if (m_pKeyMgr->KeyDown(KEY_SPACE))
 	{
@@ -876,6 +943,7 @@ void CPlayer::StateMachine()
 		{
 		case OBJ_IDLE:
 		{
+
 			m_fAnimSpeed = 1.0f;
 			m_fRotSpeed = 4.f;
 			m_pMeshCom->Set_AnimationSet(48);
@@ -1129,6 +1197,8 @@ void CPlayer::IdleOption()
 		if (m_pMeshCom->Is_AnimationSetEnd())
 		{
 			m_eCurState = OBJ_IDLE;
+			Off_ChargeEffect();
+
 			m_uiCombo = 0;
 		}
 	}
@@ -1241,10 +1311,17 @@ void CPlayer::DodgeAttackMoveSet(_float fTimeDelta)
 {
 	if (m_eCurState == OBJ_DODGE_ATTACK)
 	{
+		//if(Get_AniRatio())
+		//On_ExplosionEffect(fTimeDelta);
 		MoveAni(fTimeDelta, 0.0f, 0.1f, 2.0f, _vec3{ 1.f,1.f,1.f });
 
 		MoveAni(fTimeDelta, 0.1f, 0.2f, 7.0f, _vec3{ 1.f,1.f,1.f });
 		SetColliderEnable(0.1f, 0.5f);
+		if(Get_AniRatio()>=0.2f)
+			SplashEffect();
+
+
+
 
 	}
 }
@@ -1274,6 +1351,8 @@ void CPlayer::Guard(_float fTimeDelta)
 
 void CPlayer::Guard_H(_float fTimeDelta)
 {
+	Off_ChargeEffect();
+	
 	if (m_eCurState == OBJ_GUARD_H)
 	{
 		if (m_fCurSP < 0.f)
@@ -1379,11 +1458,12 @@ void CPlayer::Collision_Check(_float fTimeDelta)
 			_bool bIsAttackColl, bIsStepColl, bIsHurtColl = { false, };
 		
 			bIsAttackColl = m_pCalculatorCom->Collsion_Sphere(m_pColliderGroupCom->Get_CollVec(Engine::COLOPT_ATTACK),
-				m_pColliderGroupCom->Get_ColliderEnable(Engine::COLOPT_ATTACK),
-				pTargetCollCom->Get_CollVec(Engine::COLOPT_HURT),
-				pTargetCollCom->Get_ColliderEnable(Engine::COLOPT_HURT));
+															m_pColliderGroupCom->Get_ColliderEnable(Engine::COLOPT_ATTACK),
+															pTargetCollCom->Get_CollVec(Engine::COLOPT_HURT),
+															pTargetCollCom->Get_ColliderEnable(Engine::COLOPT_HURT));
+
 			bIsStepColl = m_pCalculatorCom->Bounding_Sphere(m_pColliderGroupCom->Get_CollVec(Engine::COLOPT_STEP),
-				pTargetCollCom->Get_CollVec(Engine::COLOPT_STEP), &fPower);
+															pTargetCollCom->Get_CollVec(Engine::COLOPT_STEP), &fPower);
 
 			
 			bIsHurtColl = m_pCalculatorCom->Collsion_Sphere(m_pColliderGroupCom->Get_CollVec(Engine::COLOPT_HURT),
@@ -1396,10 +1476,27 @@ void CPlayer::Collision_Check(_float fTimeDelta)
 
 			if (pTargetCollCom->IsColl(Engine::COLOPT_HURT, Engine::STATE_ENTER))
 			{
-				//cout << "공격 발생 " << endl;
-
+				//CGameEffect::Create(m_pGraphicDev,L")
 				m_pCam->Shake(0.25f,40.f);
 				pMonster->HurtMon(m_fDamage, false);
+
+				_vec3 vMonsPos = pMonster->Get_Pos();
+
+				Engine::CGameObject*		pGameObject = nullptr;
+				Engine::CLayer*		pLayer = Engine::Get_Layer(L"GameLogic");
+				wstring wstrEffect = L"";
+
+				pGameObject = CHitEffect::Create(m_pGraphicDev, L"T_FX_Flash", _vec2(0.4f, 0.4f), vMonsPos, 2.f, 6.f, 2);
+				wstrEffect = L"Player_T_FX_Flash" + to_wstring(m_uiEffectIdx);
+				pLayer->Add_GameObject(wstrEffect.c_str(), pGameObject);
+
+				pGameObject = CHitEffect::Create(m_pGraphicDev, L"Ring", _vec2(1.f, 1.f), vMonsPos, 1.5f, 4.f, 1);
+				wstrEffect = L"Player_T_FX_RIng" + to_wstring(m_uiEffectIdx);
+				pLayer->Add_GameObject(wstrEffect.c_str(), pGameObject);
+
+				m_uiEffectIdx++;
+
+
 
 			}		
 			/*	if (m_pColliderGroupCom->IsColl(Engine::COLOPT_ATTACK, Engine::STATE_ENTER))
@@ -1451,8 +1548,7 @@ void CPlayer::Collision_Check(_float fTimeDelta)
 					{
 						Hurt(vPos, pColl->Get_WorldPos(), 12.f);
 						m_pCam->Shake(0.3f,5.f);
-
-
+						
 					}
 
 				}
@@ -1588,6 +1684,7 @@ void CPlayer::Hurt(_vec3 vPos, _vec3 vTargetPos, _float fDamage)
 
 void CPlayer::KnockBack(_float fTimeDelta)
 {
+	Off_ChargeEffect();
 
 	if (m_dwHurtDirectionFlag)
 	{
@@ -1866,6 +1963,7 @@ void CPlayer::EnhanceItem_Inventory(wstring wstrName)
 			Item.second--;
 			if (Item.second <= 0)
 			{
+
 				wstring wstrTemp = InvenItr->first;
 				wcout << wstrTemp << L"erase " << endl;
 				InvenItr = m_InventoryVec.erase(InvenItr);
@@ -1877,6 +1975,75 @@ void CPlayer::EnhanceItem_Inventory(wstring wstrName)
 	}// 하나제거 
 
 
+
+}
+
+_vec3 CPlayer::Get_Look()
+{
+	return *m_pTransformCom->Get_Info(Engine::INFO_LOOK);
+}
+
+void CPlayer::SplashEffect()
+{
+	if (!m_bIsSplash)
+	{
+		_vec3 vAddPos = Get_Look()*9.f;
+		//if(!m_bIsLockOn)
+			vAddPos = Get_Look()*3.f;
+
+		for (int i = 0; i < 2; i++)
+			m_pSplashEffect[i]->Set_Enable(true, vAddPos);
+		
+		m_pGroundEffect[0]->Set_Enable(true, vAddPos);
+		m_bIsSplash = true;
+	}
+}
+
+
+
+void CPlayer::On_ChargeEffect(_float fTimeDelta)
+{
+	if (!m_bIsCharge)
+	{
+		m_bIsSplash = false;
+		m_bIsCharge = true;
+		for(int i=0 ; i< 2 ; i++)
+		m_pChargeEffect[i]->Set_Enable(true);
+	}
+}
+
+void CPlayer::Off_ChargeEffect()
+{
+	if (m_bIsCharge)
+	{
+		for (int i = 0; i < 2; i++)
+			m_pChargeEffect[i]->Set_Enable(false);
+
+		m_bIsCharge = false;
+	}
+
+}
+
+void CPlayer::On_ExplosionEffect(_float fTimeDelta)
+{
+	if (!m_bIsExplosion)
+	{
+		m_bIsExplosion = true;
+
+		for (int i = 0; i<2; i++)
+			m_pExplosionEffect[i]->Set_Enable(true);
+	}
+}
+
+void CPlayer::Off_ExplosionEffect(_float fTimeDelta)
+{
+	if (m_bIsExplosion)
+	{
+		for (int i = 0; i < 2; i++)
+			m_pExplosionEffect[i]->Set_Enable(false);
+
+		m_bIsExplosion = false;
+	}
 
 }
 

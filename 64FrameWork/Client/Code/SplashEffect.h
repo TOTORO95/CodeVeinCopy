@@ -38,7 +38,7 @@ public:
 	void				VerticalMove(_float fTimeDelta);
 	virtual void		Set_Enable(bool bEnable)override;
 	void				Set_Enable(bool bEnable,_vec3 vAddPos);
-
+	void				Set_ScaleSpeed(_float fTimeSpeed);
 
 private:
 	_bool		m_bIsDistortion = false;
@@ -52,6 +52,7 @@ private:
 	_float		m_fSplashScale = 0.f;
 	_vec3		m_vOldScale = { INIT_VEC3 };
 	_float		m_fMaxScale = 0.f;
+	_float      m_fSCTimeSpeed = 1.f;
 private:
 	virtual void Free(void) override;
 };
