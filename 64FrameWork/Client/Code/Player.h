@@ -103,6 +103,9 @@ private:
 	void					Off_ChargeEffect();
 	void					On_ExplosionEffect(_float fTimeDelta);
 	void					Off_ExplosionEffect(_float fTimeDelta);
+	void					PlayStepSound(_float fTimeDelta, _float fSoundRate);
+	void					PlayRateSound(wstring wstrSound,_bool& bIsSoundPlay);
+
 private:
 	Engine::CTexture*		m_pNoiseTextureCom = nullptr;
 
@@ -177,6 +180,14 @@ private:
 	CSplashEffect*				m_pSplashEffect[2] = { nullptr, };
 	_bool						m_bIsSplash = false;
 	CGroundEffect*				m_pGroundEffect[2] = { nullptr, };
+	
+	
+	//Sound
+	wstring						m_wstrAtkSound = L"";
+	_bool						m_bIsAttackSound = false;
+	_bool						m_bIsStepSound = false;
+	_float						m_fStepRate = 0.33f;
+	_float						m_fStepTime = 0.f;
 public:
 	static CPlayer*		Create(LPDIRECT3DDEVICE9 pGraphicDev, _uint uiIdx=0, _uint uiStageIdx = 0);
 

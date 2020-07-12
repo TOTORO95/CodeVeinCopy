@@ -20,6 +20,7 @@
 #include "ExplosionEffect.h"
 #include "GroundEffect.h"
 #include "HitEffect.h"
+#include "SoundMgr.h"
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev, _uint uiIdx,_uint uiStageIdx)
 	: Engine::CGameObject(pGraphicDev)
 {
@@ -227,13 +228,18 @@ _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 	StateMachine();
 	if (m_eCurState >= OBJ_ATTACK && m_eCurState <= OBJ_CHARGE_ATTACK)
 	{
-
+		if(Get_AniRatio()>0.2f)
+			m_bIsAttackSound = false;
 		if (m_eCurState == OBJ_ATTACK)
 		{
 			SetColliderEnable(0.15f, 0.5f);
+			if (Get_AniRatio() > 0.15f&&Get_AniRatio()<0.2f)
+				PlayRateSound(m_wstrAtkSound, m_bIsAttackSound);
+	
 		}
 		else if (m_eCurState == OBJ_CHARGE_ATTACK)
 		{
+
 			SetColliderEnable(0.1f, 0.15f);
 			SetColliderEnable(0.175f, 0.2f);
 			SetColliderEnable(0.225f, 0.25f);
@@ -257,8 +263,8 @@ _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 	}
 
 
-	_vec3 vPos = *m_pTransformCom->Get_Info(Engine::INFO_POS);
-	cout << "X=" << vPos.x << "y=" << vPos.y << "Z=" << vPos.z << endl;
+	//_vec3 vPos = *m_pTransformCom->Get_Info(Engine::INFO_POS);
+	//cout << "X=" << vPos.x << "y=" << vPos.y << "Z=" << vPos.z << endl;
 	//cout << "Cur Cell " << m_pNaviCom->Get_CurIndex() << endl;
 	//Guard_H(fTimeDelta);
 
@@ -500,19 +506,24 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 				{
 				case 2:
 					m_pMeshCom->Set_AnimationSet(33);
+					m_wstrAtkSound  = L"Swing1.wav";
 					break;
 				case 3:
 					m_pMeshCom->Set_AnimationSet(32);
+					m_wstrAtkSound  = L"Swing2.wav";
 					break;
 				case 4:
 					m_pMeshCom->Set_AnimationSet(31);
+					m_wstrAtkSound  = L"Swing3.wav";
 					break;
 				case 5:
 					m_pMeshCom->Set_AnimationSet(30);
+					m_wstrAtkSound  = L"Swing4.wav";
 					break;
 				case 6:
 				{
 					m_pMeshCom->Set_AnimationSet(34);
+					m_wstrAtkSound = L"Swing0.wav";
 					m_uiCombo = 1;
 				}
 					break;
@@ -531,6 +542,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 				if (dRatio >= 0.2&&dRatio < 0.9)
 				{
 					m_eCurState = OBJ_DODGE_ATTACK;
+					m_wstrAtkSound = L"Swing0.wav";
 					m_pMeshCom->Set_AnimationSet(23);
 
 				}
@@ -540,6 +552,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 			{
 
 				m_eCurState = OBJ_ATTACK;
+				m_wstrAtkSound  = L"Swing0.wav";
 				m_pMeshCom->Set_AnimationSet(34);
 				m_fCurSP -= 10.f;
 				//m_pCam->Set_ShakeTime(2.f);
@@ -549,6 +562,15 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 
 	}
 
+	if (m_eCurState == OBJ_WALK || m_eCurState == OBJ_RUN)
+	{
+		if (m_eCurState == OBJ_WALK)
+			PlayStepSound(fTimeDelta, 0.7f);
+		m_fStepRate = 0.66f;
+		if (m_eCurState == OBJ_RUN)
+			PlayStepSound(fTimeDelta, 0.35f);
+
+	}
 
 	if (m_pKeyMgr->KeyPressing(KEY_ALT))
 	{
@@ -746,7 +768,7 @@ void CPlayer::Check_Direction(_float fTimeDelta)
 	if (m_bIsLockOn)
 	{
 		if (m_pCam != nullptr &&m_pCam->Get_MonTransform() !=nullptr)
-		{
+		{//walk_03
 
 			_vec3 vPos, vMonPos;
 
@@ -758,7 +780,6 @@ void CPlayer::Check_Direction(_float fTimeDelta)
 			if (fTargetDist > 1.f)
 				RotateToLook(fTimeDelta);
 			_vec3	vDir;
-
 			switch (dwDirectionFlag)
 			{
 			case DIR_F:
@@ -951,6 +972,8 @@ void CPlayer::StateMachine()
 			break;
 		case OBJ_WALK:
 		{
+			m_fStepRate = 0.66f;
+
 			m_fAnimSpeed = 2.0f;
 			m_fSpeed = 2.0f;
 			m_fRotSpeed = 6.f;
@@ -963,6 +986,7 @@ void CPlayer::StateMachine()
 
 			m_fSpeed = 10.f;//3.5
 			m_fRotSpeed = 6.f;
+			m_fStepRate = 0.33f;
 
 			if (m_bIsLockOn)
 			{
@@ -1311,8 +1335,6 @@ void CPlayer::DodgeAttackMoveSet(_float fTimeDelta)
 {
 	if (m_eCurState == OBJ_DODGE_ATTACK)
 	{
-		//if(Get_AniRatio())
-		//On_ExplosionEffect(fTimeDelta);
 		MoveAni(fTimeDelta, 0.0f, 0.1f, 2.0f, _vec3{ 1.f,1.f,1.f });
 
 		MoveAni(fTimeDelta, 0.1f, 0.2f, 7.0f, _vec3{ 1.f,1.f,1.f });
@@ -2045,6 +2067,26 @@ void CPlayer::Off_ExplosionEffect(_float fTimeDelta)
 		m_bIsExplosion = false;
 	}
 
+}
+
+void CPlayer::PlayStepSound(_float fTimeDelta,_float fSoundRate)
+{
+	m_fStepTime += fTimeDelta;
+	if (m_fStepTime >= fSoundRate)
+	{
+		CSoundMgr::GetInstance()->PlaySoundID(L"walk_03.wav", CSoundMgr::EFFECT);
+		m_fStepTime = 0.f;
+	}
+
+}
+
+void CPlayer::PlayRateSound(wstring wstrSound, _bool & bIsSoundPlay)
+{
+	if (!bIsSoundPlay)
+	{
+		bIsSoundPlay = true;
+		CSoundMgr::GetInstance()->PlaySoundID(wstrSound, CSoundMgr::EFFECT);
+	}
 }
 
 

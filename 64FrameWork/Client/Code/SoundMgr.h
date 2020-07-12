@@ -22,7 +22,7 @@ public:
 public:
 	HRESULT Initialize();
 	void UpdateSound();
-	void PlaySound(const wstring& wstrSoundKey, CHANNEL_ID eID);
+	void PlaySoundID(const wstring& wstrSoundKey, CHANNEL_ID eID);
 	void PlayBGM(const wstring& wstrSoundKey);
 	void StopSound(CHANNEL_ID eID);
 	void StopAll();

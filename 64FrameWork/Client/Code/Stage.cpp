@@ -203,6 +203,7 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar* pLayerTag)
 	}
 	else
 	{
+
 		pGameObject = CRussianHat::Create(m_pGraphicDev, L"RussianHat", 0, 1);
 		NULL_CHECK_RETURN(pGameObject, E_FAIL);
 		FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);

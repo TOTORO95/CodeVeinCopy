@@ -28,7 +28,7 @@ void CSoundMgr::UpdateSound()
 	FMOD_System_Update(m_pSystem);
 }
 
-void CSoundMgr::PlaySound(const wstring& wstrSoundKey, CHANNEL_ID eID)
+void CSoundMgr::PlaySoundID(const wstring& wstrSoundKey, CHANNEL_ID eID)
 {
 	auto iter_find = m_MapSound.find(wstrSoundKey);
 
