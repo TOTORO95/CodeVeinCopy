@@ -63,6 +63,11 @@ _int CRussainHatHone::Update_GameObject(const _float & fTimeDelta)
 		
 	if (m_bIsColl)
 	{
+		if (!m_bIsEndSound)
+		{
+			CSoundMgr::GetInstance()->PlaySoundID(L"IceCrunch.wav", CSoundMgr::EFFECT);
+			m_bIsEndSound = true;
+		}
 		Dissolve(fTimeDelta);
 	}
 	else
@@ -75,6 +80,11 @@ _int CRussainHatHone::Update_GameObject(const _float & fTimeDelta)
 			m_fScale = 80.f;
 			if (m_fTime >= 1.6f)
 			{
+				if (!m_bIsEndSound)
+				{
+					CSoundMgr::GetInstance()->PlaySoundID(L"IceCrunch.wav", CSoundMgr::EFFECT);
+					m_bIsEndSound = true;
+				}
 				Dissolve(fTimeDelta);
 
 			}

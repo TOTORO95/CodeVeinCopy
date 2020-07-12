@@ -61,6 +61,7 @@ private:
 	_uint					m_uiPass = 0;
 	_float					m_fDissolveTime =1.7f;
 	_vec3					m_vColor = { 1.f,1.f,1.f};
+	_bool					m_bIsEndSound = false;
 
 #ifdef _DEBUG
 	_matrix					m_matSphereWorld;		//

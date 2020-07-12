@@ -43,7 +43,7 @@ public:
 	_float					Get_AniRatio();
 	_float					Get_AngleOnTheTarget();
 	_float					Get_TargetDist();
-
+	_float					Get_Damage() { return m_fDamage; }
 	void					HurtMon(_float fDamage,_bool bIsStrongAtk);
 	
 
@@ -54,7 +54,8 @@ public:
 
 	_bool					CheckDeath() { return m_bIsMonDead; }
 
-
+	void					PlayStepSound(wstring wstrSound,_float fTimeDelta, _float fSoundRate);
+	void					PlayMonSound(wstring wstrSound, _bool& bIsSoundPlay);
 protected:
 	HRESULT					Load_Text(const TCHAR * pFilePath);
 	wchar_t*				CharToWChar(const char* pstrSrc);
@@ -94,6 +95,11 @@ protected:
 	_float					m_fMaxHp = 100.f;
 	_vec3					m_vRespawn = { INIT_VEC3 };
 	_uint					m_uiCellIdx = 0;
+
+	//sound
+	_bool					m_bIsAtkSound = false;
+	_float					m_fStepTime = 0.f;
+	_bool					m_bIsHurtSound = false;
 
 public:
 	static CDynamicObject*	Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrName, _uint uiIdx = 0, _uint uiStageIdx=0);

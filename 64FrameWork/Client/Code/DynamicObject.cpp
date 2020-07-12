@@ -336,6 +336,25 @@ void CDynamicObject::HurtMon(_float fDamage, _bool bIsStrongAtk)
 	m_bisStrongHurt = bIsStrongAtk;
 }
 
+void CDynamicObject::PlayStepSound(wstring wstrSound,_float fTimeDelta, _float fSoundRate)
+{
+	m_fStepTime += fTimeDelta;
+	if (m_fStepTime >= fSoundRate)
+	{
+		CSoundMgr::GetInstance()->PlaySoundID(wstrSound, CSoundMgr::EFFECT);
+		m_fStepTime = 0.f;
+	}
+}
+
+void CDynamicObject::PlayMonSound(wstring wstrSound, _bool & bIsSoundPlay)
+{
+	if (!bIsSoundPlay)
+	{
+		bIsSoundPlay = true;
+		CSoundMgr::GetInstance()->PlaySoundID(wstrSound, CSoundMgr::EFFECT);
+	}
+}
+
 HRESULT CDynamicObject::Load_Text(const TCHAR * pFilePath)
 {
 	ifstream fin;

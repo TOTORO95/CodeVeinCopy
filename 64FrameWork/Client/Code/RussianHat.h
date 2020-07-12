@@ -109,7 +109,11 @@ private:
 	CExplosionEffect*			m_pExplosionEffect[2] = { nullptr, };
 	_bool						m_bIsCharge = false;
 	_bool						m_bIsExplosion = false;
-
+	_bool						m_bIsJumpSound = false;
+	_bool						m_bIsBoostSound = false;
+	_bool						m_bIsThieldSound = false;
+	_bool						m_bIsHoneSound = false;
+	_bool						m_bisSwing = false;
 
 private:
 	virtual void			Free(void) override;

@@ -97,14 +97,16 @@ private:
 
 	_vec3				Get_Look();
 	//effect
-	void					SplashEffect();
+	void				SplashEffect();
 
-	void					On_ChargeEffect(_float fTimeDelta);
-	void					Off_ChargeEffect();
-	void					On_ExplosionEffect(_float fTimeDelta);
-	void					Off_ExplosionEffect(_float fTimeDelta);
-	void					PlayStepSound(_float fTimeDelta, _float fSoundRate);
-	void					PlayRateSound(wstring wstrSound,_bool& bIsSoundPlay);
+	void				On_ChargeEffect(_float fTimeDelta);
+	void				Off_ChargeEffect();
+	void				On_ExplosionEffect(_float fTimeDelta);
+	void				Off_ExplosionEffect(_float fTimeDelta);
+	void				PlayStepSound(_float fTimeDelta, _float fSoundRate);
+	void				PlayRateSound(wstring wstrSound, _bool& bIsSoundPlay);
+	void				HurtSound(wstring wstrMonName);
+
 
 private:
 	Engine::CTexture*		m_pNoiseTextureCom = nullptr;
@@ -188,6 +190,10 @@ private:
 	_bool						m_bIsStepSound = false;
 	_float						m_fStepRate = 0.33f;
 	_float						m_fStepTime = 0.f;
+	_bool						m_bIsChargeSound = false;
+	_bool						m_bIsStrongSound = false;
+	_bool						m_bIsDodge = false;
+
 public:
 	static CPlayer*		Create(LPDIRECT3DDEVICE9 pGraphicDev, _uint uiIdx=0, _uint uiStageIdx = 0);
 

@@ -49,6 +49,16 @@ _int CPortalSub::Update_GameObject(const _float& fTimeDelta)
 			m_pTransformCom->Set_Scale(m_vScale.x*1.5f, m_vScale.y*1.5f, m_vScale.z*1.5f);
 	}
 
+
+	if (CKeyMgr::GetInstance()->KeyDown(KEY_UP))
+	{
+		CSoundMgr::GetInstance()->PlaySoundID(L"UI_open.wav", CSoundMgr::EFFECT);
+	}
+	if (CKeyMgr::GetInstance()->KeyDown(KEY_DOWN))
+	{
+		CSoundMgr::GetInstance()->PlaySoundID(L"UI_open.wav", CSoundMgr::EFFECT);
+	}
+
 	Engine::CGameObject::Update_GameObject(fTimeDelta);
 	BillBoard();
 	m_pRendererCom->Add_RenderGroup(Engine::RENDER_ALPHA, this);

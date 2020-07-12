@@ -48,6 +48,8 @@ private://Pattern
 	void					Down_End(_float fTimeDelta);
 	void					Death(_float fTimeDelta);
 
+
+
 public:
 	static CRedDevil*	Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrName, _uint uiIdx = 0, _uint uiInstIdx = 0);
 	static CRedDevil*	Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrName, _uint uiIdx ,  TRANSFORM_INFO tInfo, _uint uiStageIdx = 0);

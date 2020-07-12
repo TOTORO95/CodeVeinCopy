@@ -40,12 +40,19 @@ _int CShopSub::Update_GameObject(const _float& fTimeDelta)
 	if (Engine::Get_DIKeyState(DIK_LEFT) || Engine::Get_DIKeyState(DIK_RIGHT))
 	{
 		m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
+		CSoundMgr::GetInstance()->PlaySoundID(L"UI_open.wav", CSoundMgr::EFFECT);
 	}
 	else
 	{
 		if (Engine::Get_DIKeyState(DIK_UP) || Engine::Get_DIKeyState(DIK_DOWN))
+		{
 			m_pTransformCom->Set_Scale(m_vScale.x*1.5f, m_vScale.y*1.5f, m_vScale.z*1.5f);
+			CSoundMgr::GetInstance()->PlaySoundID(L"UI_open.wav", CSoundMgr::EFFECT);
+		}
 	}
+
+
+
 
 	Engine::CGameObject::Update_GameObject(fTimeDelta);
 	BillBoard();

@@ -33,7 +33,7 @@ CRedDevil::~CRedDevil()
 HRESULT CRedDevil::Ready_GameObject()
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
-
+	m_fDamage = 7.f;
 	m_fCurHp = m_fMaxHp =300.f;
 	m_fAttackRange = 4.f;
 	Set_TransformData();
@@ -263,29 +263,36 @@ void CRedDevil::StateMachine()
 			m_pMeshCom->Set_AnimationSet(41);
 			break;
 		case RED_DashAttack_E:
+			m_fDamage = 15.f;
 			m_uiAni = 42;
 			m_pMeshCom->Set_AnimationSet(42);
 			break;
 		case RED_DashAttack_L:
+			m_fDamage = 15.f;
 			m_uiAni = 43;
+
 			m_pMeshCom->Set_AnimationSet(43);
 			break;
 		case RED_DashAttack_S:
+			m_fDamage = 15.f;
 			m_uiAni = 44;
 			m_pMeshCom->Set_AnimationSet(44);
 			break;
 		case RED_Attack3:
 			m_fAnimSpeed = 2.5f;
+			m_fDamage = 7.f;
 			m_uiAni = 45;
 			m_pMeshCom->Set_AnimationSet(45);
 			break;
 		case RED_Attack2:
 			m_fAnimSpeed = 2.5f;
+			m_fDamage = 7.f;
 			m_uiAni = 46;
 			m_pMeshCom->Set_AnimationSet(46);
 			break;
 		case RED_Attack1:
 			m_fAnimSpeed = 2.5f;
+			m_fDamage = 7.f;
 			m_uiAni = 47;
 			m_pMeshCom->Set_AnimationSet(47);
 			break;
@@ -405,7 +412,7 @@ void CRedDevil::KnockBack(_float fTimeDelta)
 
 		fAngle = Get_Angle(vDir, vLook);
 		
-
+		PlayMonSound(L"troll_hurt_03.wav", m_bIsHurtSound);
 		if (cosf(D3DXToRadian(fAngle)) >= fCos60)
 			m_dwHurtDirectionFlag |= FRONT;
 		else if (cosf(D3DXToRadian(fAngle)) <= -fCos60)
@@ -490,16 +497,16 @@ void CRedDevil::Chaing_Target(_float fTimeDelta)
 {
 	if (m_pNaviCom != nullptr)
 	{
-			_vec3 vDir, vOutPos;
-			_float	fDgree = Get_AngleOnTheTarget();
-			vDir = Get_TargetPos() - Get_Pos();
-			m_fDistance = D3DXVec3Length(&vDir);
-			vDir.y = 0.f;
-			D3DXVec3Normalize(&vDir, &vDir);
-			RotateToTarget(fTimeDelta, 0.0f);
+		_vec3 vDir, vOutPos;
+		_float	fDgree = Get_AngleOnTheTarget();
+		vDir = Get_TargetPos() - Get_Pos();
+		m_fDistance = D3DXVec3Length(&vDir);
+		vDir.y = 0.f;
+		D3DXVec3Normalize(&vDir, &vDir);
+		RotateToTarget(fTimeDelta, 0.0f);
 
-			m_pNaviCom->Move_OnNaviMesh(&Get_Pos(), &(vDir * m_fSpeed* fTimeDelta), &vOutPos);
-			m_pTransformCom->Set_Pos(vOutPos.x, vOutPos.y, vOutPos.z);
+		m_pNaviCom->Move_OnNaviMesh(&Get_Pos(), &(vDir * m_fSpeed* fTimeDelta), &vOutPos);
+		m_pTransformCom->Set_Pos(vOutPos.x, vOutPos.y, vOutPos.z);
 	}
 
 }
@@ -511,6 +518,7 @@ void CRedDevil::DashAttack_S(_float fTimeDelta)
 	{
 		//m_fRotSpeed = 3.0f;
 		//RotateToTarget(fTimeDelta, 0.0f, 0.3f);
+		PlayStepSound(L"vampire_step2.wav", fTimeDelta, 0.33f);
 
 		m_fRotSpeed = 2.0f;
 		m_fAnimSpeed = 1.5f;
@@ -532,6 +540,7 @@ void CRedDevil::DashAttack_L(_float fTimeDelta)
 	if (m_eCurState == RED_DashAttack_L)
 	{
 		//SetColliderEnable(0.0f,);
+		PlayStepSound(L"vampire_step2.wav", fTimeDelta, 0.33f);
 
 		m_fAnimSpeed = 1.5f;
 		m_fRotSpeed = 2.0f;
@@ -554,6 +563,7 @@ void CRedDevil::DashAttack_E(_float fTimeDelta)
 
 	if (m_eCurState == RED_DashAttack_E)
 	{
+		PlayMonSound(L"delia_transform_break2.wav", m_bIsAtkSound);
 		m_fAnimSpeed = 3.f;
 		m_fRotSpeed = 2.0f;
 		//RotateToTarget(fTimeDelta, 0.0f, 0.3f);
@@ -573,12 +583,17 @@ void CRedDevil::Attack1(_float fTimeDelta)
 {
 	if (m_eCurState == RED_Attack1)
 	{
-		m_fAttackRange = 7.f;
-		SetColliderEnable(0.05f, 0.5f);
+		m_bIsHurtSound = false;
 
+		m_fAttackRange = 7.f;
+		SetColliderEnable(0.05f, 0.45f);
+		if (Get_AniRatio() >= 0.1f)
+			PlayMonSound(L"Lynn_Swing_BattleGlaive_Slash_01.wav", m_bIsAtkSound);
 		if (Get_AniRatio() >= 0.65f)
 		{
-			if(m_fAttackRange>=m_fDistance)
+			m_bIsAtkSound = false;
+
+			if (m_fAttackRange >= m_fDistance)
 				m_eCurState = RED_Attack2;
 			else
 				m_eCurState = RED_Fight_Idle;
@@ -603,15 +618,16 @@ void CRedDevil::Attack2(_float fTimeDelta)
 		m_fAttackRange = 7.f;
 
 		SetColliderEnable(0.2f,0.4f);
+		if (Get_AniRatio() >= 0.2f)
+			PlayMonSound(L"Lynn_Swing_BattleGlaive_Slash_02.wav", m_bIsAtkSound);
 
 		if (Get_AniRatio() >= 0.65f)
 		{
+			m_bIsAtkSound = false;
 			if (m_fAttackRange >= m_fDistance)
 				m_eCurState = RED_Attack3;
 			else
 				m_eCurState = RED_Fight_Idle;
-
-
 		}
 		else
 		{
@@ -628,9 +644,12 @@ void CRedDevil::Attack3(_float fTimeDelta)
 	if (m_eCurState == RED_Attack3)
 	{
 		SetColliderEnable(0.1f, 0.5f);
-
+		if (Get_AniRatio() >= 0.1f)
+			PlayMonSound(L"Lynn_Swing_BattleGlaive_Slash_03.wav", m_bIsAtkSound);
 		if (Get_AniRatio() >= 0.8f)
 		{
+			m_bIsAtkSound = false;
+
 			m_eCurState = RED_Fight_Idle;
 		}
 		else
@@ -657,14 +676,19 @@ void CRedDevil::Idle(_float fTimeDelta)
 				m_fSpeed = 3.f;
 				RotateToTarget(fTimeDelta, 0.0f);
 				m_eCurState = RED_DashAttack_S;
+				m_bIsHurtSound = false;
+
 			}
 			else
 			{
 				m_fSpeed = 3.f;
-
-				if(m_eCurState == RED_Run_F)
+				if (m_eCurState == RED_Run_F)
+				{
+					m_bIsHurtSound = false;
+					
+					PlayStepSound(L"vampire_step2.wav", fTimeDelta, 0.33f);
 					Chaing_Target(fTimeDelta);
-
+				}
 				RotateToTarget(fTimeDelta, 0.0f);
 				m_eCurState = RED_Run_F;
 
@@ -748,8 +772,10 @@ void CRedDevil::HurtMoveSet(_float fTimeDelta)
 	D3DXVec3Normalize(&vDir, &vDir);
 	if (m_eCurState == RED_Down_S || m_eCurState == RED_Down_P)
 	{
+
 		if (Get_AniRatio() >= 0.85f)
 		{
+
 			if (m_fCurHp > 0.f)
 				m_eCurState == RED_Down_S ? m_eCurState = RED_DownEnd_S : m_eCurState = RED_DownEnd_P;
 			else
@@ -759,11 +785,16 @@ void CRedDevil::HurtMoveSet(_float fTimeDelta)
 			}
 		
 		}
+			
+
 	}
 	else
 	{
 		if (Get_AniRatio() >= 0.85f)
+		{
 			m_eCurState = RED_Fight_Idle;
+
+		}
 	}
 	switch (m_eCurState)
 	{
@@ -803,6 +834,7 @@ void CRedDevil::Death(_float fTimeDelta)
 	
 	}
 }
+
 
 CRedDevil * CRedDevil::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrName,_uint uiIdx, _uint uiStageIdx)
 {

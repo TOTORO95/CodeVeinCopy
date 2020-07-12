@@ -257,9 +257,15 @@ _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 		m_bIsSplash = false;
 
 		if (Get_AniRatio() <= 0.3f)
+		{
 			m_pColliderGroupCom->Set_ColliderEnable(Engine::COLOPT_HURT, false);
+			PlayRateSound(L"Jump.wav", m_bIsDodge);
+		}
 		else
+		{
 			m_pColliderGroupCom->Set_ColliderEnable(Engine::COLOPT_HURT, true);
+			m_bIsDodge = false;
+		}
 	}
 
 
@@ -590,7 +596,8 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 
 	if (m_pKeyMgr->KeyPressing(KEY_RBUTTON))
 	{
-		On_ChargeEffect(fTimeDelta);
+		if (m_fChargeTime >= 0.2f)
+			On_ChargeEffect(fTimeDelta);
 		m_eCurState = OBJ_STRONG_ATTACK;
 
 		m_pMeshCom->Set_AnimationSet(28);
@@ -607,6 +614,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		}
 		else
 		{
+		
 			m_eCurState = OBJ_STRONG_ATTACK;
 			Off_ChargeEffect();
 		}
@@ -762,8 +770,10 @@ void CPlayer::Check_Direction(_float fTimeDelta)
 	DWORD dwDirectionFlag;
 
 	if (m_eCurState == OBJ_DODGE)
+	{
 		dwDirectionFlag = m_dwDodge_DirectionFlag;
-	else		
+	}
+	else
 		dwDirectionFlag = m_dwDirectionFlag;
 	if (m_bIsLockOn)
 	{
@@ -1314,6 +1324,16 @@ void CPlayer::StorngAttackMoveSet(_float fTimeDelta)
 {
 	if (m_eCurState == OBJ_STRONG_ATTACK)
 	{
+		if (Get_AniRatio() >= 0.f&&Get_AniRatio() < 0.03f)
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::EFFECT);
+
+		if (Get_AniRatio() >= 0.3f&&Get_AniRatio() <= 0.35f)
+			PlayRateSound(L"Swing5.wav", m_bIsStrongSound);
+		if(Get_AniRatio() >= 0.35f)
+		{
+			CSoundMgr::GetInstance()->StopSound(CSoundMgr::EFFECT);
+			m_bIsStrongSound = false;
+		}
 		MoveAni(fTimeDelta, 0.0f, 0.025f, 5.0f, _vec3{ 1.f,1.f,1.f });
 		MoveAni(fTimeDelta, 0.25f, 0.285f, 5.0f, _vec3{ 1.f,1.f,1.f });
 
@@ -1324,6 +1344,10 @@ void CPlayer::ChargeAttackMoveSet(_float fTimeDelta)
 {
 	if (m_eCurState == OBJ_CHARGE_ATTACK)
 	{
+	
+		if (Get_AniRatio() >= 0.15f&&Get_AniRatio() < 0.2f)
+			PlayRateSound(L"SpinAttack.wav", m_bIsAttackSound);
+
 		MoveAni(fTimeDelta, 0.15f, 0.2f, 4.0f, _vec3{ 1.f,1.f,1.f });
 
 		MoveAni(fTimeDelta, 0.2f, 0.26f, 8.0f, _vec3{ 1.f,1.f,1.f });
@@ -1507,6 +1531,13 @@ void CPlayer::Collision_Check(_float fTimeDelta)
 				Engine::CGameObject*		pGameObject = nullptr;
 				Engine::CLayer*		pLayer = Engine::Get_Layer(L"GameLogic");
 				wstring wstrEffect = L"";
+				vMonsPos.y += 2.f;
+				if (pMonster->Get_InstName().find(L"Russian") != wstring::npos)
+					CSoundMgr::GetInstance()->PlaySoundID(L"Hurk_Swing_GreatSword_Parrying_Blunt_01.wav", CSoundMgr::EFFECT);
+				else
+					CSoundMgr::GetInstance()->PlaySoundID(L"Hurk_Swing_GreatSword_Parrying_Metal_01.wav", CSoundMgr::EFFECT);
+
+
 
 				pGameObject = CHitEffect::Create(m_pGraphicDev, L"T_FX_Flash", _vec2(0.4f, 0.4f), vMonsPos, 2.f, 6.f, 2);
 				wstrEffect = L"Player_T_FX_Flash" + to_wstring(m_uiEffectIdx);
@@ -1539,7 +1570,7 @@ void CPlayer::Collision_Check(_float fTimeDelta)
 			}*/
 			if (pTargetCollCom->IsColl(Engine::COLOPT_HURT, Engine::STATE_EXIT))
 			{
-				cout << "공격 끝 " << endl;
+				//cout << "공격 끝 " << endl;
 			}
 			_vec3 vPos, vTargetPos, vOutPos, vDir;
 			if (bIsStepColl)
@@ -1568,7 +1599,14 @@ void CPlayer::Collision_Check(_float fTimeDelta)
 				{
 					if (pColl->IsColl())
 					{
-						Hurt(vPos, pColl->Get_WorldPos(), 12.f);
+
+						HurtSound(pMonster->Get_InstName());
+
+
+
+
+						Hurt(vPos, pColl->Get_WorldPos(), pMonster->Get_Damage());
+
 						m_pCam->Shake(0.3f,5.f);
 						
 					}
@@ -1663,7 +1701,17 @@ void CPlayer::Hurt(_vec3 vPos, _vec3 vTargetPos, _float fDamage)
 	if (m_bIsGuard)
 	{
 		m_eCurState = OBJ_GUARD_H;
+		CSoundMgr::GetInstance()->PlaySoundID(L"Action_Guard_Success_delia.wav", CSoundMgr::EFFECT);
 		return;
+	}
+	if (bIsStrongAttack)
+	{
+
+		CSoundMgr::GetInstance()->PlaySoundID(L"delia_lift_heavy_03.wav", CSoundMgr::EFFECT);
+	}
+	else
+	{
+		CSoundMgr::GetInstance()->PlaySoundID(L"delia_hurt_weak_03.wav", CSoundMgr::EFFECT);
 	}
 	switch (m_dwHurtDirectionFlag)	
 	{
@@ -1747,6 +1795,7 @@ void CPlayer::PlayerUI()
 {
 	if (m_pKeyMgr->KeyDown(KEY_X))
 	{
+
 		m_eCurState = OBJ_IDLE;
 		Engine::CTransform* pDavisTransform = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic", L"Davis_0", L"Com_Transform", Engine::ID_DYNAMIC));
 		if (pDavisTransform == nullptr)
@@ -1755,12 +1804,16 @@ void CPlayer::PlayerUI()
 		_float fLength = D3DXVec3Length(&vDist);
 		if (fLength < 1.5f)
 		{
+			CSoundMgr::GetInstance()->PlaySoundID(L"ui_equip_item.wav", CSoundMgr::EFFECT);
+
 			m_pShopSub->ChangeEnable(true);
 			m_pShoplist->ChangeEnable(true);
 			m_bIsLockOn = true;
 		}
 		else
 		{
+			CSoundMgr::GetInstance()->PlaySoundID(L"ui_equip_item.wav", CSoundMgr::EFFECT);
+
 			m_pShopSub->ChangeEnable(false);
 			m_pShoplist->ChangeEnable(false);
 			m_bIsLockOn = false;
@@ -1769,14 +1822,16 @@ void CPlayer::PlayerUI()
 	}
 	if (m_pKeyMgr->KeyDown(KEY_I))
 	{
+		CSoundMgr::GetInstance()->PlaySoundID(L"ui_equip_item.wav", CSoundMgr::EFFECT);
 		m_eCurState = OBJ_IDLE;
 		m_pInvenSub->ChangeEnable();
 		m_pInven->ChangeEnable();
 		m_bIsLockOn = !m_bIsLockOn;
 	}
 	
-	if (m_pKeyMgr->KeyDown(KEY_O))
+	if (m_pKeyMgr->KeyDown(KEY_J))
 	{
+		CSoundMgr::GetInstance()->PlaySoundID(L"ui_equip_item.wav", CSoundMgr::EFFECT);
 		m_eCurState = OBJ_IDLE;
 		m_pPortal->ChangeEnable();
 		m_pPortalSub->ChangeEnable();
@@ -1797,6 +1852,7 @@ void CPlayer::PlayerUI()
 					DeleteItem_Inventory(wstrItem);
 				else if (m_pShopSub->Get_ItemName().find(L"강화") != wstring::npos)
 					EnhanceItem_Inventory(wstrItem);
+				CSoundMgr::GetInstance()->PlaySoundID(L"ui_craft_complete.wav", CSoundMgr::EFFECT);
 
 			}
 
@@ -1804,6 +1860,7 @@ void CPlayer::PlayerUI()
 		else if (m_pInven->IsOn())
 		{
 			wstrItem = m_pInven->Get_ItemName();
+
 			if (wstrItem.find(L"의") != wstring::npos)
 			{
 				if (m_pInvenSub->Get_ItemName().find(L"착용") != wstring::npos)
@@ -1813,6 +1870,7 @@ void CPlayer::PlayerUI()
 						m_pSword[0]->Set_Enable(true);
 						m_pSword[1]->Set_Enable(false);
 						m_pSword[2]->Set_Enable(false);
+						CSoundMgr::GetInstance()->PlaySoundID(L"ui_craft_complete.wav", CSoundMgr::EFFECT);
 
 					}
 					else if (wstrItem.find(L"기사의") != wstring::npos)
@@ -1820,6 +1878,7 @@ void CPlayer::PlayerUI()
 						m_pSword[0]->Set_Enable(false);
 						m_pSword[1]->Set_Enable(true);
 						m_pSword[2]->Set_Enable(false);
+						CSoundMgr::GetInstance()->PlaySoundID(L"ui_craft_complete.wav", CSoundMgr::EFFECT);
 
 					}
 					else if (wstrItem.find(L"병사의") != wstring::npos)
@@ -1827,6 +1886,7 @@ void CPlayer::PlayerUI()
 						m_pSword[0]->Set_Enable(false);
 						m_pSword[1]->Set_Enable(false);
 						m_pSword[2]->Set_Enable(true);
+						CSoundMgr::GetInstance()->PlaySoundID(L"ui_craft_complete.wav", CSoundMgr::EFFECT);
 					}
 
 				}
@@ -1834,9 +1894,9 @@ void CPlayer::PlayerUI()
 		}
 		else if (m_pPortal->IsOn())
 		{
-			
 			if (m_pPortal->Get_PortalIdx() == 1)
 			{
+				CSoundMgr::GetInstance()->PlaySoundID(L"UI_enchant_start.wav", CSoundMgr::EFFECT);
 				if (m_pPortalSub->Get_ItemName().find(L"이동") != wstring::npos)
 				{
 
@@ -1987,7 +2047,7 @@ void CPlayer::EnhanceItem_Inventory(wstring wstrName)
 			{
 
 				wstring wstrTemp = InvenItr->first;
-				wcout << wstrTemp << L"erase " << endl;
+				//wcout << wstrTemp << L"erase " << endl;
 				InvenItr = m_InventoryVec.erase(InvenItr);
 				break;
 			}
@@ -2009,6 +2069,15 @@ void CPlayer::SplashEffect()
 {
 	if (!m_bIsSplash)
 	{
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::EFFECT);
+		CSoundMgr::GetInstance()->StopSound(CSoundMgr::EFFECT);
+
+		if(m_eCurState==OBJ_DODGE_ATTACK)
+			CSoundMgr::GetInstance()->PlaySoundID(L"Hurk_Swing_GreatSword_Parrying_Blunt_01.wav", CSoundMgr::EFFECT);
+
+		else
+			CSoundMgr::GetInstance()->PlaySoundID(L"Explosion.wav", CSoundMgr::EFFECT);
+
 		_vec3 vAddPos = Get_Look()*9.f;
 		//if(!m_bIsLockOn)
 			vAddPos = Get_Look()*3.f;
@@ -2025,8 +2094,14 @@ void CPlayer::SplashEffect()
 
 void CPlayer::On_ChargeEffect(_float fTimeDelta)
 {
+
 	if (!m_bIsCharge)
 	{
+		//if (Get_AniRatio() <= 0.1f)
+		//	return;
+
+		CSoundMgr::GetInstance()->PlaySoundID(L"Charge.wav", CSoundMgr::EFFECT);
+
 		m_bIsSplash = false;
 		m_bIsCharge = true;
 		for(int i=0 ; i< 2 ; i++)
@@ -2038,6 +2113,8 @@ void CPlayer::Off_ChargeEffect()
 {
 	if (m_bIsCharge)
 	{
+
+
 		for (int i = 0; i < 2; i++)
 			m_pChargeEffect[i]->Set_Enable(false);
 
@@ -2050,6 +2127,7 @@ void CPlayer::On_ExplosionEffect(_float fTimeDelta)
 {
 	if (!m_bIsExplosion)
 	{
+
 		m_bIsExplosion = true;
 
 		for (int i = 0; i<2; i++)
@@ -2087,6 +2165,19 @@ void CPlayer::PlayRateSound(wstring wstrSound, _bool & bIsSoundPlay)
 		bIsSoundPlay = true;
 		CSoundMgr::GetInstance()->PlaySoundID(wstrSound, CSoundMgr::EFFECT);
 	}
+}
+
+void CPlayer::HurtSound(wstring wstrMonName)
+{
+	if (wstrMonName.find(L"RedDe") != wstring::npos)
+		CSoundMgr::GetInstance()->PlaySoundID(L"Lynn_Swing_BttleGlaive_Drag.wav", CSoundMgr::EFFECT);
+	else if (wstrMonName.find(L"Cocoon") != wstring::npos)
+		CSoundMgr::GetInstance()->PlaySoundID(L"Burning.wav", CSoundMgr::EFFECT);
+	else if (wstrMonName.find(L"Russian") != wstring::npos)
+		CSoundMgr::GetInstance()->PlaySoundID(L"delia_transform_break2.wav", CSoundMgr::EFFECT);
+
+
+
 }
 
 

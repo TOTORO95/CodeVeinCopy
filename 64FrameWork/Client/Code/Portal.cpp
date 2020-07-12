@@ -59,6 +59,7 @@ _int CPortal::Update_GameObject(const _float& fTimeDelta)
 			m_vTempTest.x -= 0.01f;
 		if (Engine::Get_DIKeyState(DIK_RIGHT))
 			m_vTempTest.x += 0.01f;
+
 	}
 	else
 	{
@@ -76,11 +77,13 @@ _int CPortal::Update_GameObject(const _float& fTimeDelta)
 
 	if (CKeyMgr::GetInstance()->KeyDown(KEY_LEFT))
 	{
+		CSoundMgr::GetInstance()->PlaySoundID(L"UI_open.wav", CSoundMgr::EFFECT);
 		if (m_uiWaypointIdx >0)
 			m_uiWaypointIdx--;
 	}
 	if (CKeyMgr::GetInstance()->KeyDown(KEY_RIGHT))
 	{
+		CSoundMgr::GetInstance()->PlaySoundID(L"UI_open.wav", CSoundMgr::EFFECT);
 		m_uiWaypointIdx++;
 		if (m_uiWaypointIdx > 3)
 			m_uiWaypointIdx = 3;

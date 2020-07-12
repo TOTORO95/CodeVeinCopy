@@ -50,6 +50,10 @@ HRESULT CInven::LateReady_GameObject(void)
 	pGameObject = m_pInfoUI= CInvenInfo::Create(m_pGraphicDev, L"EmptyFrame2", m_fLength);
 	wstrButton = m_wstrInstName + L"_InfoUI";
 	Engine::Get_Layer(L"UI")->Add_GameObject(wstrButton.c_str(), pGameObject);
+
+
+
+
 	return S_OK;
 }
 
@@ -63,10 +67,10 @@ _int CInven::Update_GameObject(const _float& fTimeDelta)
 	if (Engine::Get_DIKeyState(DIK_LEFT) || Engine::Get_DIKeyState(DIK_RIGHT))
 	{
 		m_pTransformCom->Set_Scale(m_vScale.x*1.5f, m_vScale.y*1.5f, m_vScale.z*1.5f);
-		//if (Engine::Get_DIKeyState(DIK_LEFT))
-		//	m_vTempTest.x -= 0.01f;
-		//if (Engine::Get_DIKeyState(DIK_RIGHT))
-		//	m_vTempTest.x += 0.01f;
+		if (Engine::Get_DIKeyState(DIK_LEFT))
+			m_vTempTest.x -= 0.01f;
+		if (Engine::Get_DIKeyState(DIK_RIGHT))
+			m_vTempTest.x += 0.01f;
 	}
 	else
 	{
@@ -74,13 +78,15 @@ _int CInven::Update_GameObject(const _float& fTimeDelta)
 		{
 			m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
 
-			//if (Engine::Get_DIKeyState(DIK_UP))
-			//	m_vTempTest.y+= 0.01f;
-			//if (Engine::Get_DIKeyState(DIK_DOWN))
-			//	m_vTempTest.y -= 0.01f;
-			//m_vTempTest.z = -0.1f;
+			if (Engine::Get_DIKeyState(DIK_UP))
+				m_vTempTest.y+= 0.01f;
+			if (Engine::Get_DIKeyState(DIK_DOWN))
+				m_vTempTest.y -= 0.01f;
+			m_vTempTest.z = -0.1f;
 		}
 	}
+
+
 
 	Engine::CGameObject::Update_GameObject(fTimeDelta);
 	BillBoard();
@@ -250,6 +256,8 @@ wstring CInven::Get_ItemName()
 	
 	if (iWeaponIdx[iSelectIdx] >= 0)
 	{
+		//if ((*m_InvenVec)[iSelectIdx].first.empty())
+		//	return L"";
 		switch (iSelectIdx)
 		{
 		case 0:

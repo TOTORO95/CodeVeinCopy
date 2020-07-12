@@ -372,6 +372,7 @@ void CRussianHat::StateMachine()
 		{
 		case RUSSIAN_START_IDLE:  
 		{
+
 			m_fAttackRange = 4.0f;
 			m_fAnimSpeed = 2.0f;
 			m_pMeshCom->Set_AnimationSet(43);
@@ -641,13 +642,22 @@ void CRussianHat::Battle_Start(_float fTimeDelta)
 	if (m_eCurState == RUSSIAN_BATTLE_START)
 	{
 		_float fRatio = Get_AniRatio();
+		if(fRatio>=0.3f)
+			PlayMonSound(L"Blunt.wav", m_bIsAtkSound);
+		if (fRatio >= 0.43f)
+			PlayMonSound(L"Hit_Scale_Blunt.wav", m_bIsHurtSound);
+
+		cout << Get_AniRatio() << endl;
 		if (Get_AniRatio()>=0.7f)
 		{
 			m_bIsStart = true;
+			m_bIsAtkSound = false;
+			m_bIsHurtSound = false;// º¯¼ö¸¸µé±â½È¾î¼­¾¸
 		}
 	}
 	if (m_eCurState == RUSSIAN_START_IDLE)
 	{
+
 		if (Get_TargetDist() <= 6.0f)
 			m_eCurState = RUSSIAN_BATTLE_START;
 	}
@@ -790,6 +800,7 @@ void CRussianHat::TshieldAttack_Ready(_float fTimeDelta)
 {
 	if (m_eCurState == RUSSIAN_ATTACK_READY)
 	{
+
 		m_fRotSpeed = 3.0f;
 		RotateToTarget(fTimeDelta, 0.0f, 0.3f);
 
@@ -797,16 +808,20 @@ void CRussianHat::TshieldAttack_Ready(_float fTimeDelta)
 		RotateToTarget(fTimeDelta, 0.43f);
 
 		SetColliderEnable(0.4f, 0.5f);
-
-		
+		if (Get_AniRatio() >= 0.1f)
+			PlayMonSound(L"delia_swing_strong_v1.wav", m_bIsAtkSound);
+		if (Get_AniRatio() >= 0.4f)
+			PlayMonSound(L"Hurk_Swing_GreatSword_KnockBack_01.wav", m_bIsThieldSound);
 
 		if (Get_AniRatio() >= 0.58f)
 		{
-			if(Get_TargetDist()>=6.0f||rand() &1)
+			m_bIsAtkSound = false;
+			m_bIsThieldSound = false;
+			if (Get_TargetDist() >= 6.0f || rand() & 1)
 				m_eCurState = RUSSIAN_ATTACK1;
 			else
+			
 				m_eCurState = RUSSIAN_ATTACK2;
-
 		}
 
 	}
@@ -821,9 +836,15 @@ void CRussianHat::TshieldAttack(_float fTimeDelta)
 		SetColliderEnable(0.0f, 0.89f);
 
 		if (Get_AniRatio() >= 0.9f)
+		{
+			m_bIsBoostSound = false;
 			m_eCurState = RUSSIAN_BATTLE_IDLE;
+		}
 		else
 		{
+			//PlayMonSound(L"Charge.wav", m_bIsBoostSound);
+			if(Get_AniRatio()<0.5f)
+				PlayStepSound(L"FireCrash.wav", fTimeDelta, 0.25f);
 			if (Get_AniRatio() <= 0.3f)
 			{
 				//BoostEffect(fTimeDelta);
@@ -841,12 +862,16 @@ void CRussianHat::Tshield_Whirlwind(_float fTimeDelta)
 {
 	if (m_eCurState == RUSSIAN_ATTACK2)
 	{
+		PlayMonSound(L"SpinAttack.wav", m_bIsAtkSound);
 
 		SetColliderEnable(0.2f, 0.6f);
 
 
 		if (Get_AniRatio() >= 0.9f)
+		{
 			m_eCurState = RUSSIAN_BATTLE_IDLE;
+			m_bIsAtkSound = false;
+		}
 		else
 		{
 			if(Get_AniRatio()<=0.7f)
@@ -862,13 +887,16 @@ void CRussianHat::TshieldFist(_float fTimeDelta)
 
 	if(m_eCurState == RUSSIAN_ATTACK3)
 	{
+		if(Get_AniRatio()>=0.25f)
+			PlayMonSound(L"Fist.wav", m_bIsAtkSound);
+
 		SetColliderEnable(0.29f, 0.47f);
 		if (m_fAttackRange == 4.0f)
 			m_fAttackRange = 8.0f;
 
 		if (Get_AniRatio() >= 0.8f)
 		{
-
+			m_bIsAtkSound = false;
 			if (!m_bIsPhase2)
 				m_eCurState = RUSSIAN_DODGE;
 			else
@@ -914,11 +942,15 @@ void CRussianHat::TshieldSlide_S(_float fTimeDelta)
 {
 	if (m_eCurState == RUSSIAN_ATTACK_SLIDE_S)
 	{
+
 		SetColliderEnable(0.5f, 0.8f);
+		if (Get_AniRatio() >= 0.25f)
+			PlayMonSound(L"SliceOn.wav", m_bIsAtkSound);
 
 		if (Get_AniRatio() >= 0.8f)
 		{
 			m_eCurState = RUSSIAN_ATTACK_SLIDE_L;
+			m_bIsAtkSound = false;
 		}
 		else
 		{
@@ -928,16 +960,14 @@ void CRussianHat::TshieldSlide_S(_float fTimeDelta)
 
 		}
 	}
-
-
 }
 
 void CRussianHat::TshieldSlide_L(_float fTimeDelta)
 {
 	if (m_eCurState == RUSSIAN_ATTACK_SLIDE_L)
 	{
+		PlayStepSound(L"FireCrash.wav", fTimeDelta, 0.1f);
 		SetColliderEnable(0.0f, 0.8f);
-
 		if (Get_AniRatio() >= 0.8f)
 		{
 			m_eCurState = RUSSIAN_ATTACK_SLIDE_E;
@@ -974,9 +1004,15 @@ void CRussianHat::Dodge(_float fTimeDelta)
 {
 	if (m_eCurState == RUSSIAN_DODGE)
 	{
+		if (Get_AniRatio() >= 0.08f)
+			PlayMonSound(L"BackStep1.wav", m_bIsBoostSound);
+		if (Get_AniRatio() >= 0.4f)
+			PlayMonSound(L"BackStep2.wav", m_bIsAtkSound);
 
 		if (Get_AniRatio() >= 0.65f)
 		{
+			m_bIsBoostSound = false;
+			m_bIsAtkSound = false;
 			if(!m_bIsPhase2)
 				m_eCurState = RUSSIAN_ATTACK_SLIDE_S;
 			else
@@ -1000,11 +1036,16 @@ void CRussianHat::Tshield_JumpAttack(_float fTimeDelta)
 	if (m_eCurState == RUSSIAN_ATTACK_JUMP)
 	{
 		SetColliderEnable(0.5f, 0.6f);
-			
+		PlayMonSound(L"BoostJump.wav", m_bIsJumpSound);
+
 		
+		if (Get_AniRatio() >= 0.48f)
+			PlayMonSound(L"HoneUp.wav", m_bIsAtkSound);
 
 		if (Get_AniRatio() >= 0.65f)
 		{
+			m_bIsAtkSound = false;
+			m_bIsJumpSound = false;
 			m_eCurState = RUSSIAN_ATTACK2;
 			m_bIsSplash = false;
 		}
@@ -1033,10 +1074,19 @@ void CRussianHat::Tshield_JumpAttack(_float fTimeDelta)
 void CRussianHat::HoneAttack1(_float fTimeDelta)
 {
 	if (m_eCurState == RUSSIAN_ATTACK_HORN1)
-	{
+	{//
+		if (Get_AniRatio() >= 0.05f)
+			PlayMonSound(L"Hurk_Swing_GreatSword_Strong_01.wav", m_bisSwing);
+		if (Get_AniRatio() >= 0.18f)
+			PlayMonSound(L"HoneDown.wav", m_bIsAtkSound);
+		if (Get_AniRatio() >= 0.48f)
+			PlayMonSound(L"HoneUp.wav", m_bIsHoneSound);
 
 		if (Get_AniRatio() >= 0.8f)
 		{
+			m_bIsAtkSound = false;
+			m_bIsHoneSound = false;
+			m_bisSwing = false;
 			m_fAnimSpeed = 1.0f;
 			if (!m_bIsPhase2)
 			{
@@ -1264,12 +1314,21 @@ void CRussianHat::BoostAttack_S(_float fTimeDelta)
 {
 	if (m_eCurState == RUSSIAN_FIST_ATTACKBOOST1_S)
 	{
+		if (Get_AniRatio() >= 0.05f)
+			PlayMonSound(L"Hurk_Swing_GreatSword_Strong_02.wav", m_bIsAtkSound);
+
+		if(Get_AniRatio()>=0.5f)
+			PlayMonSound(L"Hurk_Swing_GreatSword_KnockBack_01.wav", m_bIsBoostSound);
 		if (Get_AniRatio() >= 0.7f)
+		{
 			m_eCurState = RUSSIAN_FIST_ATTACKBOOST1_L;
+			m_bIsBoostSound = false;
+			m_bIsAtkSound = false;
+		}
 		else
 		{
 			RotateToTarget(fTimeDelta, 0.05f, 0.45f);
-		
+
 		}
 	}
 }
@@ -1282,6 +1341,8 @@ void CRussianHat::BoostAttack_L(_float fTimeDelta)
 			m_eCurState = RUSSIAN_FIST_ATTACKBOOST1_A_E;
 		else
 		{
+			PlayStepSound(L"FireCrash.wav", fTimeDelta, 0.15f);
+
 			if (Get_AniRatio() <= 3.2f)
 			{
 				SnowSplashEffect(fTimeDelta, 200.f);
@@ -1319,8 +1380,14 @@ void CRussianHat::FistAttack_N(_float fTimeDelta)
 {
 	if (m_eCurState == RUSSIAN_FIST_ATTACKNORMAL1)
 	{
+		if (Get_AniRatio() >= 0.25f)
+			PlayMonSound(L"Fist.wav", m_bIsAtkSound);
+
 		if (Get_AniRatio() >= 0.8f)
+		{
 			m_eCurState = RUSSIAN_ATTACK3;
+			m_bIsAtkSound = false;
+		}
 		else
 		{
 			RotateToTarget(fTimeDelta, 0.f, 0.4f);
@@ -1338,7 +1405,12 @@ void CRussianHat::IceBlade(_float fTimeDelta)
 {
 	if (m_eCurState == RUSSIAN_ICEBLADE_N)
 	{
-		m_fAttackRange = 8.0f;
+		m_fAttackRange = 20.0f;
+		if (Get_AniRatio() >= 0.05f)
+			PlayMonSound(L"Hit_common_ice.wav", m_bIsAtkSound);
+		if (Get_AniRatio() >= 0.35f)
+			PlayMonSound(L"IceBladeSwing.wav", m_bisSwing);
+
 
 		if (Get_AniRatio() >= 0.58f)
 		{
@@ -1348,6 +1420,8 @@ void CRussianHat::IceBlade(_float fTimeDelta)
 		if (Get_AniRatio() >= 0.8f)
 		{
 			m_eCurState = RUSSIAN_BATTLE_IDLE;
+			m_bIsAtkSound = false;
+			m_bisSwing = false;
 		}
 		else
 		{
@@ -1385,8 +1459,14 @@ void CRussianHat::BoostJump_S(_float fTimeDelta)
 
 	if (m_eCurState == RUSSIAN_FIST_ATTACKJUMP_S)
 	{
+		if (Get_AniRatio() >= 0.1f)
+			PlayMonSound(L"KetsugiCharge.wav", m_bIsAtkSound);
+		if (Get_AniRatio() >= 0.48f)
+			PlayStepSound(L"FireCrash.wav", fTimeDelta, 0.15f);
+
 		if (Get_AniRatio() >= 0.89f)
 		{
+			m_bIsAtkSound = false;
 			m_eCurState = RUSSIAN_FIST_ATTACKJUMP_L;
 		}
 		else
@@ -1400,6 +1480,7 @@ void CRussianHat::BoostJump_S(_float fTimeDelta)
 			{
 				On_KetsugiEffect(fTimeDelta);
 			}
+
 			MoveAni(fTimeDelta, 0.48f, 0.5f, 1.f, _vec3(0.f, 1.0f, 0.f), true);
 			MoveAni(fTimeDelta, 0.5f, 0.6f, 2.f, _vec3(0.f, 1.0f, 0.f), true);
 			MoveAni(fTimeDelta, 0.6f, 0.8f, 3.f, _vec3(0.f, 1.0f, 0.f), true);
@@ -1415,6 +1496,7 @@ void CRussianHat::BoostJump_L(_float fTimeDelta)
 {
 	if (m_eCurState == RUSSIAN_FIST_ATTACKJUMP_L)
 	{
+		PlayStepSound(L"FireCrash.wav", fTimeDelta, 0.15f);
 		if (Get_AniRatio() >= 15.f)
 		{
 			m_eCurState = RUSSIAN_FIST_ATTACKJUMP_E;
@@ -1442,10 +1524,12 @@ void CRussianHat::BoostJump_E(_float fTimeDelta)
 {
 	if (m_eCurState == RUSSIAN_FIST_ATTACKJUMP_E)
 	{
-
+		if (Get_AniRatio() >= 0.1f)
+			PlayMonSound(L"Explosion.wav", m_bIsAtkSound);
 		if (Get_AniRatio() >= 0.7f)
 		{
 		
+			m_bIsAtkSound = false;
 			m_eCurState = RUSSIAN_BATTLE_IDLE;
 			m_fAttackRange = 4.f;
 			Off_ExplosionEffect(fTimeDelta);
