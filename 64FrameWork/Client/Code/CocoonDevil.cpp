@@ -4,7 +4,7 @@
 #include "ColliderManager.h"
 #include "Shield.h"
 #include "Projectile.h"
-
+#include "FireBreath.h"
 CCocoonDevil::CCocoonDevil(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrName,_uint uiIdx, _uint uiStageIdx )
 	: CDynamicObject(pGraphicDev,wstrName,uiIdx, uiStageIdx)
 {
@@ -387,7 +387,7 @@ void CCocoonDevil::Shoot(_float fTimeDelta)
 				_matrix matShoot = *m_pParentBoneMatrix * matWorld;
 				memcpy(&m_vShootPos, &matShoot._41, sizeof(_vec3));
 
-				CGameObject* pGameObject= CProjectile::Create(m_pGraphicDev, m_vShootPos);
+				CGameObject* pGameObject= CProjectile::Create(m_pGraphicDev, m_wstrInstName,"Head");
 				wstring wstrProjName = m_wstrInstName +L"_"+ to_wstring(m_uiShootCount);
 				m_ppGameObjectMap->emplace(wstrProjName, pGameObject);
 				m_uiShootCount++;
@@ -406,11 +406,39 @@ void CCocoonDevil::Mist(_float fTimeDelta)
 {
 	if (m_eCurState == CO_Attack_Mist_N)
 	{
-		m_fAttackRange = 7.f;
+		m_fAttackRange = 10.f;
 		SetColliderEnable(0.3f, 0.5f);
+		if (Get_AniRatio() >= 0.3f&&Get_AniRatio()<= 0.7f)
+		{
+			PlayMonSound(L"Bear_Howling.wav", m_bIsAtkSound);
+
+			m_fMistRate += fTimeDelta;
+			if (m_fMistRate >= 0.1f)
+			{
+				m_fMistRate = 0;
+				_vec3 vDir = Get_TargetPos() - Get_Pos();
+				D3DXVec3Normalize(&vDir, &vDir);
+				m_uiEffectIdx++;
+				Engine::CLayer* pLayer = Engine::Get_Layer(L"GameLogic");
+				Engine::CGameObject* pGameObject = CFireBreathEffect::Create(m_pGraphicDev, L"Fire2", m_wstrInstName, "Head",
+					_vec2(1.5f, 1.5f), _vec3(INIT_VEC3), vDir, false, 2.5);
+
+
+				wstring wstrTest = L"CocoonMist_" + to_wstring(m_uiEffectIdx);
+				pLayer->Add_GameObject(wstrTest.c_str(), pGameObject);
+
+				pGameObject = CFireBreathEffect::Create(m_pGraphicDev, L"Fire2", m_wstrInstName, "Head",
+					_vec2(2.25f, 2.25f), _vec3(INIT_VEC3), vDir, true, 2.5);
+				wstrTest=L"CocconDistorion_" + to_wstring(m_uiEffectIdx);
+				pLayer->Add_GameObject(wstrTest.c_str(), pGameObject);
+
+
+			}
+		}
 
 		if (Get_AniRatio() >= 0.8f)
 		{
+			m_bIsAtkSound = false;
 			m_eCurState = CO_Fight_Idle;
 		}
 		else
@@ -435,7 +463,7 @@ void CCocoonDevil::Idle(_float fTimeDelta)
 		}
 		else
 		{
-			if (m_fDistance >= 6.f)
+			if (m_fDistance >= 10.f)
 				m_eCurState = CO_Attack_Shoot_N;
 			else
 				m_eCurState = CO_Attack_Mist_N;
@@ -507,8 +535,11 @@ void CCocoonDevil::Hurt(_float fTimeDelta)
 {
 	if (m_eCurState == CO_Damage_B || m_eCurState == CO_Damage_F)
 	{
+		PlayMonSound(L"CocoonHurt.wav", m_bIsAtkSound);
+
 		if (Get_AniRatio()>=0.8f)
 		{
+			m_bIsAtkSound = false;	
 			m_eCurState = CO_Fight_Idle;
 
 

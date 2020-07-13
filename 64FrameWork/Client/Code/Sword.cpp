@@ -38,7 +38,6 @@ _int CSword::Update_GameObject(const _float& fTimeDelta)
 		m_fDissolveTime += 0.1f;
 	if (CKeyMgr::GetInstance()->KeyDown(KEY_NUM3))
 		m_fDissolveTime = 0.1f;
-	cout << m_fDissolveTime << endl;
 	if (nullptr == m_pParentBoneMatrix)
 	{
 		Engine::CDynamicMesh*	pPlayerMeshCom = dynamic_cast<Engine::CDynamicMesh*>(Engine::Get_Component(L"GameLogic", L"Player", L"Com_Mesh", Engine::ID_STATIC));

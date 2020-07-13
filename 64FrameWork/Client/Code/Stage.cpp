@@ -20,6 +20,8 @@
 #include "GameEffect.h"
 #include "SplashEffect.h"
 #include "HitEffect.h"
+#include "FireBreath.h"
+#include "BossUI.h"
 //#include "SoundMgr.h"
 CStage::CStage(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -186,6 +188,10 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar* pLayerTag)
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
 	Engine::CGameObject*		pGameObject = nullptr;
 
+	pGameObject =CBossUI::Create(m_pGraphicDev,L"BossOpning",_vec3(0.f,WINCY*0.25f,0.f),0.1f,false);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"BossOpning", pGameObject), E_FAIL);
+
 	//// Player
 	pGameObject = m_pPlayer = CPlayer::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
@@ -211,7 +217,6 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar* pLayerTag)
 		pGameObject = CShield::Create(m_pGraphicDev, 0);
 		NULL_CHECK_RETURN(pGameObject, E_FAIL);
 		FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Shield", pGameObject), E_FAIL);
-
 
 
 		//pGameObject = CHitEffect::Create(m_pGraphicDev, L"T_FX_Flash", _vec2(0.4f, 0.4f), _vec3(0.069f, 6.208f, -56.f), 2.f, 7.f,2);
@@ -287,9 +292,9 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar* pLayerTag)
 
 
 
-	//pGameObject = CCocoonDevil::Create(m_pGraphicDev, L"CocoonDevil", 0, _vec3(-12.4343f, 3.2f, -10.6f), 77);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
+	pGameObject = CCocoonDevil::Create(m_pGraphicDev, L"CocoonDevil", 0, _vec3(-12.4343f, 3.2f, -10.6f), 77);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
 
 	//pGameObject = CEffect::Create(m_pGraphicDev,L"Fire2",L"FireAlpha",_vec3(-0.44f,3.65f,-20.f));
 	//NULL_CHECK_RETURN(pGameObject, E_FAIL);

@@ -21,6 +21,8 @@
 #include "GroundEffect.h"
 #include "HitEffect.h"
 #include "SoundMgr.h"
+
+#include "FireBreath.h"
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev, _uint uiIdx,_uint uiStageIdx)
 	: Engine::CGameObject(pGraphicDev)
 {
@@ -197,9 +199,9 @@ _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 {
 	if (m_pKeyMgr->KeyDown(KEY_NUM2))
 	{
-		m_pGroundEffect[0]->Set_Enable(true);
-		SplashEffect();
-		//On_ChargeEffect(fTimeDelta);
+
+
+
 	}
 	if (m_pKeyMgr->KeyDown(KEY_NUM3))
 	{

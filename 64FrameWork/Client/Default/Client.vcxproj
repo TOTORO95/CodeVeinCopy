@@ -179,6 +179,7 @@
     <ClInclude Include="..\Code\3DUI.h" />
     <ClInclude Include="..\Code\BackGround.h" />
     <ClInclude Include="..\Code\BoostEffect.h" />
+    <ClInclude Include="..\Code\BossUI.h" />
     <ClInclude Include="..\Code\ChargeEffect.h" />
     <ClInclude Include="..\Code\CocoonDevil.h" />
     <ClInclude Include="..\Code\ColliderManager.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="..\Code\Effect.h" />
     <ClInclude Include="..\Code\ExplosionEffect.h" />
     <ClInclude Include="..\Code\Field.h" />
+    <ClInclude Include="..\Code\FireBreath.h" />
     <ClInclude Include="..\Code\GameEffect.h" />
     <ClInclude Include="..\Code\Gauge.h" />
     <ClInclude Include="..\Code\GroundEffect.h" />
@@ -243,6 +245,7 @@
     <ClCompile Include="..\Code\3DUI.cpp" />
     <ClCompile Include="..\Code\BackGround.cpp" />
     <ClCompile Include="..\Code\BoostEffect.cpp" />
+    <ClCompile Include="..\Code\BossUI.cpp" />
     <ClCompile Include="..\Code\ChargeEffect.cpp" />
     <ClCompile Include="..\Code\CocoonDevil.cpp" />
     <ClCompile Include="..\Code\ColliderManager.cpp" />
@@ -254,6 +257,7 @@
     <ClCompile Include="..\Code\Effect.cpp" />
     <ClCompile Include="..\Code\ExplosionEffect.cpp" />
     <ClCompile Include="..\Code\Field.cpp" />
+    <ClCompile Include="..\Code\FireBreath.cpp" />
     <ClCompile Include="..\Code\GameEffect.cpp" />
     <ClCompile Include="..\Code\Gauge.cpp" />
     <ClCompile Include="..\Code\GroundEffect.cpp" />

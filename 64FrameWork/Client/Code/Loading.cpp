@@ -311,6 +311,22 @@ _bool CLoading::Loading_Basic()
 											L"../../Resource/Texture/Gauge/StaminaGauge.tga"),
 											E_FAIL);
 
+
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"BossEnding",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/BossUI/BossEnding.tga"),
+		E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"BossOpning",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/BossUI/BossOpning.tga"),
+		E_FAIL);
+
+
 	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
 		RESOURCE_STAGE,
 		L"LockOnSite",
@@ -630,6 +646,15 @@ _bool CLoading::Loading_Dynamic()
 			L"../../Resource/Mesh/DynamicMesh/CocoonDevil/",
 			L"CocoonDevil.X"),
 			E_FAIL);
+
+		FAILED_CHECK_RETURN(Engine::Ready_Meshes(m_pGraphicDev,
+			RESOURCE_STAGE,
+			L"FireRock",
+			Engine::TYPE_STATIC,
+			L"../../Resource/Mesh/StaticMesh/Public/Weapon/FireRock/",
+			L"FireRock.X"),
+			E_FAIL);
+
 		FAILED_CHECK_RETURN(Engine::Ready_Meshes(m_pGraphicDev,
 			RESOURCE_STAGE,
 			L"RussianHat",

@@ -182,7 +182,7 @@ private:
 	CSplashEffect*				m_pSplashEffect[2] = { nullptr, };
 	_bool						m_bIsSplash = false;
 	CGroundEffect*				m_pGroundEffect[2] = { nullptr, };
-	
+	_uint						m_uiTest = 0;
 	
 	//Sound
 	wstring						m_wstrAtkSound = L"";

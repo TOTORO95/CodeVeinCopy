@@ -12,12 +12,13 @@ class CRenderer;
 class CCalculator;
 class CCollider;
 class CShader;
+class CTexture;
 END
 
 class CProjectile : public Engine::CGameObject
 {
 public:
-	explicit				CProjectile(LPDIRECT3DDEVICE9 pGraphicDev, _vec3 vPos);
+	explicit				CProjectile(LPDIRECT3DDEVICE9 pGraphicDev,wstring wstrInstName, string strBoneName);
 	virtual					~CProjectile(void);
 
 public:
@@ -35,6 +36,7 @@ private:
 	Engine::CTransform*		m_pTransformCom = nullptr;
 	Engine::CTransform*		m_pTargetTransformCom = nullptr;
 	Engine::CRenderer*		m_pRendererCom = nullptr;
+
 	Engine::CCalculator*	m_pCalculatorCom = nullptr;
 	Engine::CStaticMesh*	m_pMeshCom = nullptr;
 	Engine::CCollider*		m_pColliderCom = nullptr;
@@ -53,13 +55,18 @@ private:
 	_bool					m_bIsColl = false;
 	_float					m_fSpeed = 3.5f;
 	_float					m_fTime = 0.f;
+	wstring					m_wstrParentName;
+	string					m_strBoneName;
+	_matrix					m_OldMatrix;
+	_vec3					m_vPos;
+
 #ifdef _DEBUG
 	_matrix					m_matSphereWorld;		//
 #endif // _DEBUG
 
 
 public:
-	static CProjectile*		Create(LPDIRECT3DDEVICE9 pGraphicDev, _vec3 vPos);
+	static CProjectile*		Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrInstName, string strBoneName);
 
 private:
 	virtual void Free(void) override;

@@ -469,6 +469,12 @@ SplashEffect
 Weapon
 Public
 StaticMesh
+FireRock.X
+FireRock
+..\..\Resource\Mesh\StaticMesh\Public\Weapon\FireRock\
+Weapon
+Public
+StaticMesh
 RussianHatShield.X
 RussianHatShield
 ..\..\Resource\Mesh\StaticMesh\Public\Weapon\RussianHatShield\

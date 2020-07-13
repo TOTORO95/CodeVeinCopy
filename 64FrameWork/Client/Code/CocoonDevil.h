@@ -48,7 +48,7 @@ public:
 
 
 private:
-
+	_uint						m_uiEffectIdx = 0;
 	_bool						m_bIsStart = false;
 	_float						m_fJump=0.f;
 	COCCONDEVILSTATE			m_eCurState;
@@ -58,6 +58,7 @@ private:
 	_bool						m_bIsShoot = false;
 	_vec3						m_vShootPos = { INIT_VEC3 };
 	_uint						m_uiShootCount = 0;
+	_float						m_fMistRate = 0.f;
 private:
 	virtual void			Free(void) override;
 };

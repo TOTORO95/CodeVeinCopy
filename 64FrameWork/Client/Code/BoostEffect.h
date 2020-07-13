@@ -57,7 +57,7 @@ private:
 	_float					m_fScale[3];
 	_float					m_fFameTime=1.f;
 	_matrix					m_OldMatrix;
-	
+
 public:
 
 	static CBoostEffect*		Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, wstring wstrAlphaTexName, _bool bRight = true);

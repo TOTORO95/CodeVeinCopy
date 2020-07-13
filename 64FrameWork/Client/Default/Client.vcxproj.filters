@@ -211,6 +211,12 @@
     <Filter Include="02. GameObejct\02. Public\06. GameEffect\HitEffect">
       <UniqueIdentifier>{c70ecd99-2d0a-4b07-867e-f6cecc1baa4e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObejct\02. Public\06. GameEffect\FireBreath">
+      <UniqueIdentifier>{fa0bf2f5-0e58-4e01-9ea5-588442df8017}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObejct\02. Public\05. UI\BossUI">
+      <UniqueIdentifier>{6fefcc3d-3f01-4041-b2cd-36af3a2d6258}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -399,6 +405,12 @@
     <ClInclude Include="..\Code\HitEffect.h">
       <Filter>02. GameObejct\02. Public\06. GameEffect\HitEffect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\FireBreath.h">
+      <Filter>02. GameObejct\02. Public\06. GameEffect\FireBreath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\BossUI.h">
+      <Filter>02. GameObejct\02. Public\05. UI\BossUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -583,6 +595,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\HitEffect.cpp">
       <Filter>02. GameObejct\02. Public\06. GameEffect\HitEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\FireBreath.cpp">
+      <Filter>02. GameObejct\02. Public\06. GameEffect\FireBreath</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\BossUI.cpp">
+      <Filter>02. GameObejct\02. Public\05. UI\BossUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
