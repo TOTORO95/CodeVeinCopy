@@ -3,7 +3,7 @@
 #include "Export_Function.h"
 #include "ColliderManager.h"
 #include <fstream>
-
+#include "ThirdPersonCamera.h"
 CDynamicObject::CDynamicObject(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrName,_uint uiIdx, _uint uiStageIdx)
 	: Engine::CGameObject(pGraphicDev)
 {
@@ -350,6 +350,15 @@ void CDynamicObject::PlayMonSound(wstring wstrSound, _bool & bIsSoundPlay)
 {
 	if (!bIsSoundPlay)
 	{
+		
+		if(wstrSound.find(L"Explosion")!=wstring::npos)
+			m_pCam->Shake(0.35f, 100.f);
+		else if (wstrSound.find(L"HoneUp") != wstring::npos)
+			m_pCam->Shake(0.25f, 120.f);
+
+
+
+
 		bIsSoundPlay = true;
 		CSoundMgr::GetInstance()->PlaySoundID(wstrSound, CSoundMgr::EFFECT);
 	}

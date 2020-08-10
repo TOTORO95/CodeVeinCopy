@@ -41,6 +41,8 @@ CPlayer::~CPlayer(void)
 
 HRESULT CPlayer::Ready_GameObject(void)
 {
+
+
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
 	if (LOAD_MODE )
@@ -197,10 +199,16 @@ HRESULT CPlayer::LateReady_GameObject(void)
 
 _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 {
+	if (m_pNaviCom->Get_CurIndex() >= 134&& !m_bISBossStart)
+	{
+		m_bISBossStart = true;
+		CSoundMgr::GetInstance()->StopAll();;
+		CSoundMgr::GetInstance()->PlayBGM(L"BossStart.ogg");
+	}
 	if (m_pKeyMgr->KeyDown(KEY_NUM2))
 	{
 
-
+		m_eCurState = OBJ_CHECKPOINT_START;
 
 	}
 	if (m_pKeyMgr->KeyDown(KEY_NUM3))
@@ -211,9 +219,13 @@ _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 	}
 	if (m_pKeyMgr->KeyDown(KEY_U))
 	{
-
 		m_pTransformCom->Set_Pos(0.069f, 6.208f, -56.f); //New Map Boss Front
 		m_pNaviCom->Set_Index(134);// //New Map Boss Front
+	}
+	if (m_pKeyMgr->KeyDown(KEY_K))
+	{
+		m_pTransformCom->Set_Pos(50.f, -4.75f, 58.f); //New Map StartPos 
+		m_pNaviCom->Set_Index(1);// Base Init Idx 38 	}
 	}
 	UsePortal(fTimeDelta);
 	PlayerUI();
@@ -1525,7 +1537,7 @@ void CPlayer::Collision_Check(_float fTimeDelta)
 			if (pTargetCollCom->IsColl(Engine::COLOPT_HURT, Engine::STATE_ENTER))
 			{
 				//CGameEffect::Create(m_pGraphicDev,L")
-				m_pCam->Shake(0.25f,40.f);
+				m_pCam->Shake(0.25f, 100.f);
 				pMonster->HurtMon(m_fDamage, false);
 
 				_vec3 vMonsPos = pMonster->Get_Pos();
@@ -1609,7 +1621,7 @@ void CPlayer::Collision_Check(_float fTimeDelta)
 
 						Hurt(vPos, pColl->Get_WorldPos(), pMonster->Get_Damage());
 
-						m_pCam->Shake(0.3f,5.f);
+						m_pCam->Shake(0.3f, 70.f);
 						
 					}
 
@@ -2177,8 +2189,6 @@ void CPlayer::HurtSound(wstring wstrMonName)
 		CSoundMgr::GetInstance()->PlaySoundID(L"Burning.wav", CSoundMgr::EFFECT);
 	else if (wstrMonName.find(L"Russian") != wstring::npos)
 		CSoundMgr::GetInstance()->PlaySoundID(L"delia_transform_break2.wav", CSoundMgr::EFFECT);
-
-
 
 }
 

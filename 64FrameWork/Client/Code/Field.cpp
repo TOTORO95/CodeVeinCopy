@@ -28,6 +28,8 @@ HRESULT CField::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_GameLogic_Layer(L"GameLogic"), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_UI_Layer(L"UI"), E_FAIL);
 
+	CSoundMgr::GetInstance()->PlayBGM(L"Field.ogg");
+
 	//쉐이더적용후추가 
 	//m_pGraphicDev->SetRenderState(D3DRS_LIGHTING, TRUE);
 	//m_pGraphicDev->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
@@ -88,7 +90,7 @@ void CField::Render_Scene(void)
 		m_dwRenderCnt = 0;
 	}
 
-	Engine::Render_Font(L"Font_Default", m_szFPS, &_vec2(10.f, 10.f), D3DXCOLOR(1.f, 0.f, 0.f,1.f));
+	//Engine::Render_Font(L"Font_Default", m_szFPS, &_vec2(10.f, 10.f), D3DXCOLOR(1.f, 0.f, 0.f,1.f));
 
 }
 
@@ -190,9 +192,25 @@ HRESULT CField::Ready_GameLogic_Layer(const _tchar* pLayerTag)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
 
+
+	pGameObject = CRedDevil::Create(m_pGraphicDev, L"RedDevil", 1, _vec3(-11.4433f, 2.9156f, 17.80f), 54);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
+	pGameObject = CHalberd::Create(m_pGraphicDev, 1);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
+
+
 	pGameObject = CCocoonDevil::Create(m_pGraphicDev, L"CocoonDevil", 0, _vec3(-12.4343f, 3.2f,-10.6f), 77);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
+
+	pGameObject = CCocoonDevil::Create(m_pGraphicDev, L"CocoonDevil", 1, _vec3(0.0349f, 3.6578f, -19.79f), 84);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
+
+
+
 /*
 
 	pGameObject = CEffect::Create(m_pGraphicDev, L"Fire",L"FireAlpha", _vec3(-12.4343f, 3.2f, -10.6f));

@@ -88,6 +88,7 @@ public:
 	static CRussianHat*	Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrName, _uint uiIdx ,  TRANSFORM_INFO tInfo, _uint uiStageIdx = 0);
 
 private:
+
 	Engine::CTexture*			m_pNoiseTextureCom = nullptr;
 	_uint						m_uiPass = 0;
 	_float						m_fDSTime = 1.7f;

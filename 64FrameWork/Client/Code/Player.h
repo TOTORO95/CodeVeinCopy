@@ -193,6 +193,7 @@ private:
 	_bool						m_bIsChargeSound = false;
 	_bool						m_bIsStrongSound = false;
 	_bool						m_bIsDodge = false;
+	_bool						m_bISBossStart = false;
 
 public:
 	static CPlayer*		Create(LPDIRECT3DDEVICE9 pGraphicDev, _uint uiIdx=0, _uint uiStageIdx = 0);

@@ -34,7 +34,7 @@ HRESULT CRedDevil::Ready_GameObject()
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 	m_fDamage = 7.f;
-	m_fCurHp = m_fMaxHp =300.f;
+	m_fCurHp = m_fMaxHp =50.f;
 	m_fAttackRange = 4.f;
 	Set_TransformData();
 

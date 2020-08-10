@@ -13,6 +13,7 @@ class CCalculator;
 class CCollider;
 class CColliderGroup;
 END
+class CThirdPersonCamera;
 
 
 class CDynamicObject : public Engine::CGameObject
@@ -68,6 +69,7 @@ protected:
 	Engine::CTransform*		m_pTransformCom = nullptr;
 	Engine::CTransform*		m_pTargetTransformCom = nullptr;
 	Engine::CRenderer*		m_pRendererCom = nullptr;
+	CThirdPersonCamera*		m_pCam = nullptr;
 	Engine::CCalculator*	m_pCalculatorCom = nullptr;
 	Engine::CDynamicMesh*	m_pMeshCom = nullptr;
 	Engine::CColliderGroup* m_pColliderGroupCom = nullptr;

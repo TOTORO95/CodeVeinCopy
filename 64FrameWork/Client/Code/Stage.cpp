@@ -42,7 +42,6 @@ HRESULT CStage::Ready_Scene(void)
 	FAILED_CHECK_RETURN(Ready_GameLogic_Layer(L"GameLogic"), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_UI_Layer(L"UI"), E_FAIL);
 
-
 	//CSoundMgr::GetInstance()->PlayBGM(L"Adam Levine - Lost Stars Lyrics.mp3");
 	//CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BGM, 0.5f);
 	//쉐이더적용후추가 
@@ -81,8 +80,7 @@ _int CStage::Update_Scene(const _float& fTimeDelta)
 	//	//Engine::Get_Light(6)->Diffuse = D3DXCOLOR(0.95f*m_fTest3, 0.5f*m_fTest3, 0.95f*m_fTest3, 0.f);
 	//	Engine::Get_Light(6)->Attenuation0 = 0.f;
 	//	Engine::Get_Light(6)->Attenuation1 = m_fTest3;
-	//	Engine::Get_Light(6)->Attenuation2 = 0.f;
-	//	Engine::Get_Light(6)->Position = _vec3(6.55f, 0.6f, 3.5);
+	//	Engine::Get_Light(6)->Attenuation2 = 0.f;//	Engine::Get_Light(6)->Position = _vec3(6.55f, 0.6f, 3.5);
 	//	Engine::Get_Light(6)->Range= 0.335f;
 
 	//}
@@ -124,10 +122,6 @@ _int CStage::Update_Scene(const _float& fTimeDelta)
 
 	//}
 
-
-
-
-
 	if (m_pPlayer->ChangeScene())
 	{
 
@@ -162,7 +156,7 @@ void CStage::Render_Scene(void)
 		m_dwRenderCnt = 0;
 	}
 
-	Engine::Render_Font(L"Font_Default", m_szFPS, &_vec2(10.f, 10.f), D3DXCOLOR(1.f, 0.f, 0.f,1.f));
+	//Engine::Render_Font(L"Font_Default", m_szFPS, &_vec2(10.f, 10.f), D3DXCOLOR(1.f, 0.f, 0.f,1.f));
 
 }
 
@@ -188,9 +182,9 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar* pLayerTag)
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
 	Engine::CGameObject*		pGameObject = nullptr;
 
-	pGameObject =CBossUI::Create(m_pGraphicDev,L"BossOpning",_vec3(0.f,WINCY*0.25f,0.f),0.1f,false);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"BossOpning", pGameObject), E_FAIL);
+	//pGameObject =CBossUI::Create(m_pGraphicDev,L"BossOpning",_vec3(0.f,WINCY*0.25f,0.f),0.1f,false);
+	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"BossOpning", pGameObject), E_FAIL);
 
 	//// Player
 	pGameObject = m_pPlayer = CPlayer::Create(m_pGraphicDev);

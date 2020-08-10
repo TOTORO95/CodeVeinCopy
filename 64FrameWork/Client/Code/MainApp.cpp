@@ -81,7 +81,7 @@ void CMainApp::Ready_Managers(void)
 HRESULT CMainApp::SetUp_DefaultSetting(LPDIRECT3DDEVICE9 * ppGraphicDev)
 {
 	FAILED_CHECK_RETURN(Engine::Ready_GraphicDev(g_hWnd,
-		Engine::MODE_WIN,
+		Engine::MODE_FULL,
 		WINCX,
 		WINCY,
 		&m_pDeviceClass),

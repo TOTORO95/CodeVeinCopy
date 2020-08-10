@@ -148,6 +148,9 @@ wstring CPortalSub::Get_ItemName()
 	case 0:
 		wstrItem = L"이동";
 		break;
+	default:
+		wstrItem = L"이동";
+		break;
 	} 
 
 	return wstrItem;

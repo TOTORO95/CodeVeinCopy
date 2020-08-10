@@ -10,6 +10,7 @@
 #include "SplashEffect.h"
 #include "SnowSpalshEffect.h"
 #include "ChargeEffect.h"
+#include "ThirdPersonCamera.h"
 #include "ExplosionEffect.h"
 CRussianHat::CRussianHat(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrName,_uint uiIdx, _uint uiStageIdx )
 	: CDynamicObject(pGraphicDev,wstrName,uiIdx, uiStageIdx)
@@ -33,7 +34,7 @@ HRESULT CRussianHat::Ready_GameObject()
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	m_fCurHp = m_fMaxHp = 50.f;
+	m_fCurHp = m_fMaxHp = 150.f;
 	m_fAttackRange = 4.f;
 	Set_TransformData();
 
@@ -115,7 +116,8 @@ HRESULT CRussianHat::LateReady_GameObject()
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"RussianSword", pGameObject), E_FAIL);
 	m_pSword->Set_Equip(false);
 
-	
+	m_pCam = dynamic_cast<CThirdPersonCamera*>(Engine::Get_GameObject(L"UI", L"ThirdPersonCamera"));
+
 
 	_float fTestY = -4.f;
 	pGameObject =m_pSplashEffect[0]=  CSplashEffect::Create(m_pGraphicDev, L"RussianHat_Shield_Splash_01", L"RussianHat_0", "RightHand", _vec2(1.f, 1.f), _vec3(0.f, fTestY, 0.f), false, true);
@@ -189,6 +191,13 @@ _int CRussianHat::Update_GameObject(const _float & fTimeDelta)
 			m_fDSTime = 3.4f;
 	}
 
+	if (CKeyMgr::GetInstance()->KeyPressing(KEY_U))
+	{
+		m_pTransformCom->Set_Pos(13.6f, 6.4578f, -62.274f);
+		m_pNaviCom->Set_Index(148);// Base Init Idx 38 
+
+
+	}
 	//if (CKeyMgr::GetInstance()->KeyDown(KEY_NUM3))
 	//{
 	//	//m_pChargeEffect[0]->Set_Enable(false);
@@ -943,6 +952,7 @@ void CRussianHat::TshieldSlide_S(_float fTimeDelta)
 	if (m_eCurState == RUSSIAN_ATTACK_SLIDE_S)
 	{
 
+
 		SetColliderEnable(0.5f, 0.8f);
 		if (Get_AniRatio() >= 0.25f)
 			PlayMonSound(L"SliceOn.wav", m_bIsAtkSound);
@@ -1004,6 +1014,7 @@ void CRussianHat::Dodge(_float fTimeDelta)
 {
 	if (m_eCurState == RUSSIAN_DODGE)
 	{
+
 		if (Get_AniRatio() >= 0.08f)
 			PlayMonSound(L"BackStep1.wav", m_bIsBoostSound);
 		if (Get_AniRatio() >= 0.4f)
