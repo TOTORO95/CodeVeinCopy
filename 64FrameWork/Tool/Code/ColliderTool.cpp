@@ -626,7 +626,7 @@ void CColliderTool::OnDeltaposSpinPosX(NMHDR *pNMHDR, LRESULT *pResult)
 	}
 	//if (m_pSphereColl!=nullptr)
 	//	dynamic_cast<Engine::CTransform*>(m_pSphereColl->Get_Component(L"Com_Transform", Engine::ID_DYNAMIC))->m_vInfo[Engine::INFO_POS].x = m_vPosition.x;
-
+	m
 	*pResult = 0;
 }
 

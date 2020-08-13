@@ -49,6 +49,12 @@
     <Filter Include="00. Resources\02. Mesh\02. NavMesh">
       <UniqueIdentifier>{026ce3ad-32d4-47f6-94c8-59b9315a44c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00. Resources\03">
+      <UniqueIdentifier>{07c67a19-1c4b-49fa-a493-ecee06d94be5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00. Resources\00. VIBuffer\05. TrailBuffer">
+      <UniqueIdentifier>{d9c1f1e7-f799-4997-804d-8a73fd843688}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Resources.cpp">
@@ -101,6 +107,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Line.cpp">
       <Filter>00. Resources\02. Mesh\02. NavMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TrailBuffer.cpp">
+      <Filter>00. Resources\00. VIBuffer\05. TrailBuffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +166,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\Cell.h">
       <Filter>00. Resources\02. Mesh\02. NavMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\TrailBuffer.h">
+      <Filter>00. Resources\00. VIBuffer\05. TrailBuffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

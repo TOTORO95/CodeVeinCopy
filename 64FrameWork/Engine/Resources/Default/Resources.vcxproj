@@ -203,6 +203,7 @@ call CopyResources.bat</Command>
     <ClCompile Include="..\Code\StaticMesh.cpp" />
     <ClCompile Include="..\Code\TerrainTex.cpp" />
     <ClCompile Include="..\Code\Texture.cpp" />
+    <ClCompile Include="..\Code\TrailBuffer.cpp" />
     <ClCompile Include="..\Code\TriCol.cpp" />
     <ClCompile Include="..\Code\VIBuffer.cpp" />
   </ItemGroup>
@@ -223,6 +224,7 @@ call CopyResources.bat</Command>
     <ClInclude Include="..\Code\StaticMesh.h" />
     <ClInclude Include="..\Code\TerrainTex.h" />
     <ClInclude Include="..\Code\Texture.h" />
+    <ClInclude Include="..\Code\TrailBuffer.h" />
     <ClInclude Include="..\Code\TriCol.h" />
     <ClInclude Include="..\Code\VIBuffer.h" />
   </ItemGroup>

@@ -70,6 +70,9 @@ HRESULT Engine::CResourcesMgr::Ready_Buffer(LPDIRECT3DDEVICE9 pGraphicDev,
 	case BUFFER_INRCTEX:
 		pResources = CRcTex::Create(pGraphicDev, 100);
 		break;
+	case BUFFUER_TRAIL:
+		pResources = CTrailBuffer::Create(pGraphicDev, 400);
+		break;
 	}
 	NULL_CHECK_RETURN(pResources, E_FAIL);
 

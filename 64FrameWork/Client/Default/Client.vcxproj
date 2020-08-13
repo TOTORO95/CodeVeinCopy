@@ -228,6 +228,7 @@
     <ClInclude Include="..\Code\StaticObject.h" />
     <ClInclude Include="..\Code\Stone.h" />
     <ClInclude Include="..\Code\Sword.h" />
+    <ClInclude Include="..\Code\SwordTrail.h" />
     <ClInclude Include="..\Code\Terrain.h" />
     <ClInclude Include="..\Code\TestMonster.h" />
     <ClInclude Include="..\Code\TestPlayer.h" />
@@ -294,6 +295,7 @@
     <ClCompile Include="..\Code\StaticObject.cpp" />
     <ClCompile Include="..\Code\Stone.cpp" />
     <ClCompile Include="..\Code\Sword.cpp" />
+    <ClCompile Include="..\Code\SwordTrail.cpp" />
     <ClCompile Include="..\Code\Terrain.cpp" />
     <ClCompile Include="..\Code\TestMonster.cpp" />
     <ClCompile Include="..\Code\TestPlayer.cpp" />

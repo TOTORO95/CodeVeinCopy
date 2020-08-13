@@ -33,6 +33,8 @@ class CSplashEffect;
 class CChargeEffect;
 class CExplosionEffect;
 class CGroundEffect;
+class CSwordTrail;
+
 class CPlayer : public Engine::CGameObject
 {
 private:
@@ -88,7 +90,7 @@ private:
 	void				SetColliderEnable(_float fMin, _float fMax);
 
 	void				PlayerUI();
-
+	const _vec3		Get_Pos();
 	void				UsePortal(_float fTimeDelta);
 	void				UpdateGague(_float fTimeDelta);
 	void				AddItem_Inventory(wstring wstrName);
@@ -122,6 +124,8 @@ private:
 	Engine::CShader*		m_pShaderCom = nullptr;
 	Engine::CColliderGroup*	m_pColliderGroupCom=nullptr;
 	_bool					m_bIsSceneChangeFlag=false;
+
+
 
 	CKeyMgr*				m_pKeyMgr = nullptr;
 	CThirdPersonCamera*		m_pCam = nullptr;
@@ -183,6 +187,7 @@ private:
 	_bool						m_bIsSplash = false;
 	CGroundEffect*				m_pGroundEffect[2] = { nullptr, };
 	_uint						m_uiTest = 0;
+	CSwordTrail*				m_pSwordTrail = nullptr;
 	
 	//Sound
 	wstring						m_wstrAtkSound = L"";
@@ -194,6 +199,10 @@ private:
 	_bool						m_bIsStrongSound = false;
 	_bool						m_bIsDodge = false;
 	_bool						m_bISBossStart = false;
+
+
+
+
 
 public:
 	static CPlayer*		Create(LPDIRECT3DDEVICE9 pGraphicDev, _uint uiIdx=0, _uint uiStageIdx = 0);

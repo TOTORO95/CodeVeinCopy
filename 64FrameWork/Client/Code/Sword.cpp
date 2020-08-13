@@ -33,11 +33,6 @@ _int CSword::Update_GameObject(const _float& fTimeDelta)
 	else
 		m_uiPass = 0;
 
-
-	if(CKeyMgr::GetInstance()->KeyDown(KEY_NUM1))
-		m_fDissolveTime += 0.1f;
-	if (CKeyMgr::GetInstance()->KeyDown(KEY_NUM3))
-		m_fDissolveTime = 0.1f;
 	if (nullptr == m_pParentBoneMatrix)
 	{
 		Engine::CDynamicMesh*	pPlayerMeshCom = dynamic_cast<Engine::CDynamicMesh*>(Engine::Get_Component(L"GameLogic", L"Player", L"Com_Mesh", Engine::ID_STATIC));
@@ -183,13 +178,13 @@ HRESULT CSword::Add_Component(void)
 	m_pComponentMap[Engine::ID_STATIC].emplace(L"Com_Calculator", pComponent);
 
 	//// collider
-	//pComponent = m_pColliderCom = Engine::CCollider::Create(m_pGraphicDev, 
-	//														m_pMeshCom->Get_VtxPos(),
-	//														m_pMeshCom->Get_NumVtx(), 
-	//														m_pMeshCom->Get_Stride());
-	//NULL_CHECK_RETURN(pComponent, E_FAIL);
+	pComponent = m_pColliderCom = Engine::CCollider::Create(m_pGraphicDev,
+															m_pMeshCom->Get_VtxPos(),
+															m_pMeshCom->Get_NumVtx(),
+															m_pMeshCom->Get_Stride());
+	NULL_CHECK_RETURN(pComponent, E_FAIL);
+	m_pComponentMap[Engine::ID_STATIC].emplace(L"Com_Collider", pComponent);
 
-	//m_pComponentMap[Engine::ID_STATIC].emplace(L"Com_Collider", pComponent);
 
 	pComponent = m_pShaderCom = dynamic_cast<Engine::CShader*>(Engine::Clone_Prototype(L"Shader_Mesh"));
 	NULL_CHECK_RETURN(pComponent, E_FAIL);

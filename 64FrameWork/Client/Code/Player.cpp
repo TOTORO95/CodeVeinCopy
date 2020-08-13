@@ -21,7 +21,7 @@
 #include "GroundEffect.h"
 #include "HitEffect.h"
 #include "SoundMgr.h"
-
+#include "SwordTrail.h"
 #include "FireBreath.h"
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev, _uint uiIdx,_uint uiStageIdx)
 	: Engine::CGameObject(pGraphicDev)
@@ -187,6 +187,11 @@ HRESULT CPlayer::LateReady_GameObject(void)
 		FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_Halberd", pGameObject), E_FAIL);
 	}
 
+	pGameObject = m_pSwordTrail= CSwordTrail::Create(m_pGraphicDev, RESOURCE_STAGE,L"T_FX_Trail_LargeSword_01");
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_Trail", pGameObject), E_FAIL);
+
+	
 	for( int i=0; i>3 ; i++)
 		m_pSword[i]->Set_Enable(false);
 
@@ -281,8 +286,8 @@ _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 			m_bIsDodge = false;
 		}
 	}
-
-
+	
+	
 	//_vec3 vPos = *m_pTransformCom->Get_Info(Engine::INFO_POS);
 	//cout << "X=" << vPos.x << "y=" << vPos.y << "Z=" << vPos.z << endl;
 	//cout << "Cur Cell " << m_pNaviCom->Get_CurIndex() << endl;
@@ -296,7 +301,38 @@ _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 	m_pMeshCom->Play_Animation(fTimeDelta*m_fAnimSpeed);
 	m_pRendererCom->Add_RenderGroup(Engine::RENDER_NONALPHA, this);
 
+	
 
+	//if (m_pSword[0]->Get_Enable())
+	{
+
+		Engine::CTransform*	pPlayerTransformCom= dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic", L"Player", L"Com_Transform", Engine::ID_DYNAMIC));
+
+		const Engine::D3DXFRAME_DERIVED* pBone = m_pMeshCom->Get_FrameByName("RightHandAttach");
+		NULL_CHECK_RETURN(pBone, 0);
+
+		
+		_vec3 vTop, vBot;
+		_matrix matRightHand = pBone->CombinedTransformationMatrix;
+		matRightHand *= *m_pTransformCom->Get_WorldMatrixPointer();
+		memcpy(&vBot, &matRightHand._41, sizeof(_vec3));
+
+		vTop = { 0.f ,200.f,0.f };
+		_matrix matLocal= pBone->CombinedTransformationMatrix;
+		matLocal *= *m_pTransformCom->Get_WorldMatrixPointer();
+		_vec4 vPos;
+		D3DXVec3Transform(&vPos, &vTop, &matLocal);
+		memcpy(&vTop, &vPos, sizeof(_vec3));
+
+		m_pSwordTrail->Add_Vertex(&vTop, &vBot);
+
+
+
+
+
+		m_pSwordTrail->Update_GameObject(fTimeDelta);
+
+	}
 	return 0;
 }
 
@@ -328,6 +364,8 @@ void CPlayer::Render_GameObject(void)
 	Safe_Release(pEffect);
 
 	m_pColliderGroupCom->Render_Collider();
+	
+	m_pSwordTrail->Render_GameObject();
 }
 
 _float CPlayer::Get_AniRatio()
@@ -399,7 +437,7 @@ HRESULT CPlayer::Add_Component(void)
 	//	m_pMeshCom->Get_NumVtx(),
 	//	m_pMeshCom->Get_Stride());
 	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	//m_pComponentMap[Engine::ID_STATIC].emplace(L"Com_Collider", pComponent);
+	m_pComponentMap[Engine::ID_STATIC].emplace(L"Com_Collider", pComponent);
 
 	return S_OK;
 }
@@ -1925,6 +1963,11 @@ void CPlayer::PlayerUI()
 	}
 
 
+}
+
+const _vec3 CPlayer::Get_Pos()
+{
+	return *m_pTransformCom->Get_Info(Engine::INFO_POS);
 }
 
 void CPlayer::UsePortal(_float fTimeDelta)

@@ -217,6 +217,9 @@
     <Filter Include="02. GameObejct\02. Public\05. UI\BossUI">
       <UniqueIdentifier>{6fefcc3d-3f01-4041-b2cd-36af3a2d6258}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObejct\02. Public\06. GameEffect\SwordTrail">
+      <UniqueIdentifier>{daf6a273-ff2e-456b-9b83-f7c233b8666a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -411,6 +414,9 @@
     <ClInclude Include="..\Code\BossUI.h">
       <Filter>02. GameObejct\02. Public\05. UI\BossUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\SwordTrail.h">
+      <Filter>02. GameObejct\02. Public\06. GameEffect\SwordTrail</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -601,6 +607,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\BossUI.cpp">
       <Filter>02. GameObejct\02. Public\05. UI\BossUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SwordTrail.cpp">
+      <Filter>02. GameObejct\02. Public\06. GameEffect\SwordTrail</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

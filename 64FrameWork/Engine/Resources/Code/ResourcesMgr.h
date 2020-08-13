@@ -9,7 +9,7 @@
 #include "RcTex.h"
 #include "TerrainTex.h"
 #include "CubeTex.h"
-
+#include "TrailBuffer.h"
 #include "Texture.h"
 
 #include "StaticMesh.h"

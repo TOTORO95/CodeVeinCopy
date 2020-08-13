@@ -19,7 +19,6 @@ CLogo::~CLogo(void)
 
 HRESULT CLogo::Ready_Scene(void)
 {
-
 	FAILED_CHECK_RETURN(Engine::CScene::Ready_Scene(), E_FAIL);
 	FAILED_CHECK_RETURN(Ready_Resource(m_pGraphicDev, RESOURCE_END), E_FAIL);
 
@@ -159,6 +158,11 @@ HRESULT CLogo::Ready_Resource(LPDIRECT3DDEVICE9& pGraphicDev, RESOURCEID eMax)
 		Engine::BUFFER_RCTEX),
 		E_FAIL);
 
+	FAILED_CHECK_RETURN(Engine::Ready_Buffer(pGraphicDev,
+		RESOURCE_STAGE,
+		L"Buffer_Trail",
+		Engine::BUFFUER_TRAIL),
+		E_FAIL);
 	//// ÅØ½ºÃÄ
 	//FAILED_CHECK_RETURN(Engine::Ready_Texture(pGraphicDev,
 	//										RESOURCE_LOGO,
@@ -173,6 +177,20 @@ HRESULT CLogo::Ready_Resource(LPDIRECT3DDEVICE9& pGraphicDev, RESOURCEID eMax)
 		L"TitleWallpaper_UI",
 		Engine::TEX_NORMAL,
 		L"../../Resource/Texture/Title/Convert/T_TitleWallpaper_UI.tga"),
+		E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"T_FX_Trail_LargeSword_01",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/Trail/T_FX_Trail_LargeSword_01.tga"),
+		E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"T_FX_Slash_01",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/Trail/T_FX_Slash_01.tga"),
 		E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
