@@ -304,21 +304,22 @@ _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 	
 
 	//if (m_pSword[0]->Get_Enable())
+	if (m_eCurState >= OBJ_ATTACK && m_eCurState <= OBJ_CHARGE_ATTACK)
 	{
 
-		Engine::CTransform*	pPlayerTransformCom= dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic", L"Player", L"Com_Transform", Engine::ID_DYNAMIC));
+		Engine::CTransform*	pPlayerTransformCom = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic", L"Player", L"Com_Transform", Engine::ID_DYNAMIC));
 
 		const Engine::D3DXFRAME_DERIVED* pBone = m_pMeshCom->Get_FrameByName("RightHandAttach");
 		NULL_CHECK_RETURN(pBone, 0);
 
-		
+
 		_vec3 vTop, vBot;
 		_matrix matRightHand = pBone->CombinedTransformationMatrix;
 		matRightHand *= *m_pTransformCom->Get_WorldMatrixPointer();
 		memcpy(&vBot, &matRightHand._41, sizeof(_vec3));
 
 		vTop = { 0.f ,200.f,0.f };
-		_matrix matLocal= pBone->CombinedTransformationMatrix;
+		_matrix matLocal = pBone->CombinedTransformationMatrix;
 		matLocal *= *m_pTransformCom->Get_WorldMatrixPointer();
 		_vec4 vPos;
 		D3DXVec3Transform(&vPos, &vTop, &matLocal);
@@ -333,6 +334,10 @@ _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 		m_pSwordTrail->Update_GameObject(fTimeDelta);
 
 	}
+	else
+		m_pSwordTrail->Clear_Vertex();
+
+
 	return 0;
 }
 
