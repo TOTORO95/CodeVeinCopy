@@ -160,8 +160,11 @@ void CGameObject::ExtractY_NormalDir(_vec3 vDest, _vec3 vSour, _vec3 * pOut)
 
 void Engine::CGameObject::Free(void)
 {
+
+	wcout << m_ObjName << endl;
 	for (_uint i = 0; i < ID_END; ++i)
 	{
+		cout << i << endl;
 		for_each(m_pComponentMap[i].begin(), m_pComponentMap[i].end(), CDeleteMap());
 		m_pComponentMap[i].clear();
 	}

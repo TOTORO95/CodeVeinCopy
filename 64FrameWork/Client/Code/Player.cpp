@@ -210,28 +210,26 @@ _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 		CSoundMgr::GetInstance()->StopAll();;
 		CSoundMgr::GetInstance()->PlayBGM(L"BossStart.ogg");
 	}
-	if (m_pKeyMgr->KeyDown(KEY_NUM2))
-	{
-
-		m_eCurState = OBJ_CHECKPOINT_START;
-
-	}
-	if (m_pKeyMgr->KeyDown(KEY_NUM3))
-	{
-		m_pGroundEffect[0]->Set_Enable(false);
-		//Off_ChargeEffect(fTimeDelta);
-		m_bIsSplash = false;
-	}
-	if (m_pKeyMgr->KeyDown(KEY_U))
-	{
-		m_pTransformCom->Set_Pos(0.069f, 6.208f, -56.f); //New Map Boss Front
-		m_pNaviCom->Set_Index(134);// //New Map Boss Front
-	}
-	if (m_pKeyMgr->KeyDown(KEY_K))
-	{
-		m_pTransformCom->Set_Pos(50.f, -4.75f, 58.f); //New Map StartPos 
-		m_pNaviCom->Set_Index(1);// Base Init Idx 38 	}
-	}
+	//if (m_pKeyMgr->KeyDown(KEY_NUM2))
+	//{
+	//	m_eCurState = OBJ_CHECKPOINT_START;
+	//}
+	//if (m_pKeyMgr->KeyDown(KEY_NUM3))
+	//{
+	//	m_pGroundEffect[0]->Set_Enable(false);
+	//	//Off_ChargeEffect(fTimeDelta);
+	//	m_bIsSplash = false;
+	//}
+	//if (m_pKeyMgr->KeyDown(KEY_U))
+	//{
+	//	m_pTransformCom->Set_Pos(0.069f, 6.208f, -56.f); //New Map Boss Front
+	//	m_pNaviCom->Set_Index(134);// //New Map Boss Front
+	//}
+	//if (m_pKeyMgr->KeyDown(KEY_K))
+	//{
+	//	m_pTransformCom->Set_Pos(50.f, -4.75f, 58.f); //New Map StartPos 
+	//	m_pNaviCom->Set_Index(1);// Base Init Idx 38 	}
+	//}
 	UsePortal(fTimeDelta);
 	PlayerUI();
 	UpdateGague(fTimeDelta);
@@ -380,6 +378,7 @@ _float CPlayer::Get_AniRatio()
 
 HRESULT CPlayer::Add_Component(void)
 {
+	m_pKeyMgr = CKeyMgr::GetInstance();
 	Engine::CComponent*		pComponent = nullptr;
 
 	pComponent = m_pNoiseTextureCom = dynamic_cast<Engine::CTexture*>(Engine::Clone(RESOURCE_STAGE, L"T_FX_ExternalRGBNoise01"));
@@ -425,16 +424,12 @@ HRESULT CPlayer::Add_Component(void)
 
 	//m_pSpherColliderCom->Set_Radius(14.0f);
 	//m_pSpherColliderCom->Set_Pos(_vec3(0.f,250.f,0.f));
-
 	//pComponent=m_pSpherColliderCom = Engine::CSphereColliderCom::Create(m_pGraphicDev,L"Mesh_Player",m_pTransformCom);
 	//const Engine::D3DXFRAME_DERIVED* pBone = m_pMeshCom->Get_FrameByName("RightHandAttach");
-
 	//m_pSpherColliderCom->Set_DMParentMatrix(pBone);
-
 	//m_pComponentMap[Engine::ID_DYNAMIC].emplace(L"Com_SphereColl", pComponent);
 
 
-	m_pKeyMgr = CKeyMgr::GetInstance();
 
 	//// collider
 	//pComponent = m_pColliderCom = Engine::CCollider::Create(m_pGraphicDev,
@@ -442,7 +437,7 @@ HRESULT CPlayer::Add_Component(void)
 	//	m_pMeshCom->Get_NumVtx(),
 	//	m_pMeshCom->Get_Stride());
 	//NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_pComponentMap[Engine::ID_STATIC].emplace(L"Com_Collider", pComponent);
+	//m_pComponentMap[Engine::ID_STATIC].emplace(L"Com_Collider", pComponent);
 
 	return S_OK;
 }

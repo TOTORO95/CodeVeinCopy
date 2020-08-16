@@ -51,7 +51,10 @@ _int CThirdPersonCamera::Update_GameObject(const _float& fTimeDelta)
 		m_pTargetInfo = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic", L"Player", L"Com_Transform", Engine::ID_DYNAMIC));
 
 	if (CKeyMgr::GetInstance()->KeyDown(KEY_O))
+	{
 		m_bIsFix ? m_bIsFix = false: m_bIsFix=true;
+
+	}
 
 	Mouse_Fix();
 	Target_Renewal(fTimeDelta);

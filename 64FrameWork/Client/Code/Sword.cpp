@@ -173,17 +173,17 @@ HRESULT CSword::Add_Component(void)
 	pComponent->AddRef();
 	m_pComponentMap[Engine::ID_STATIC].emplace(L"Com_Renderer", pComponent);
 
-	pComponent = m_pCalculatorCom = Engine::CCalculator::Create(m_pGraphicDev);
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_pComponentMap[Engine::ID_STATIC].emplace(L"Com_Calculator", pComponent);
+	//pComponent = m_pCalculatorCom = Engine::CCalculator::Create(m_pGraphicDev);
+	//NULL_CHECK_RETURN(pComponent, E_FAIL);
+	//m_pComponentMap[Engine::ID_STATIC].emplace(L"Com_Calculator", pComponent);
 
 	//// collider
-	pComponent = m_pColliderCom = Engine::CCollider::Create(m_pGraphicDev,
-															m_pMeshCom->Get_VtxPos(),
-															m_pMeshCom->Get_NumVtx(),
-															m_pMeshCom->Get_Stride());
-	NULL_CHECK_RETURN(pComponent, E_FAIL);
-	m_pComponentMap[Engine::ID_STATIC].emplace(L"Com_Collider", pComponent);
+	//pComponent = m_pColliderCom = Engine::CCollider::Create(m_pGraphicDev,
+	//														m_pMeshCom->Get_VtxPos(),
+	//														m_pMeshCom->Get_NumVtx(),
+	//														m_pMeshCom->Get_Stride());
+	//NULL_CHECK_RETURN(pComponent, E_FAIL);
+	//m_pComponentMap[Engine::ID_STATIC].emplace(L"Com_Collider", pComponent);
 
 
 	pComponent = m_pShaderCom = dynamic_cast<Engine::CShader*>(Engine::Clone_Prototype(L"Shader_Mesh"));
@@ -195,29 +195,29 @@ HRESULT CSword::Add_Component(void)
 	return S_OK;
 }
 
-_bool CSword::Collision_ToObject(const _tchar* pLayerTag, const _tchar* pObjTag)
-{
-	Engine::CCollider*	pPlayerColliderCom = dynamic_cast<Engine::CCollider*>(Engine::Get_Component(pLayerTag, pObjTag, L"Com_Collider", Engine::ID_STATIC));
-	NULL_CHECK_RETURN(pPlayerColliderCom, false);
-	
-
-	if(0 == m_iFlag)
-		return m_pCalculatorCom->Collision_OBB(pPlayerColliderCom->Get_Min(),
-											pPlayerColliderCom->Get_Max(),
-											pPlayerColliderCom->Get_ColliderMatrix(),
-											m_pColliderCom->Get_Min(),
-											m_pColliderCom->Get_Max(),
-											m_pColliderCom->Get_ColliderMatrix());
-
-
-	else
-		return m_pCalculatorCom->Collision_AABB(pPlayerColliderCom->Get_Min(),
-											pPlayerColliderCom->Get_Max(),
-											pPlayerColliderCom->Get_ColliderMatrix(), 
-											m_pColliderCom->Get_Min(), 
-											m_pColliderCom->Get_Max(), 
-											m_pColliderCom->Get_ColliderMatrix());
-}
+//_bool CSword::Collision_ToObject(const _tchar* pLayerTag, const _tchar* pObjTag)
+//{
+//	Engine::CCollider*	pPlayerColliderCom = dynamic_cast<Engine::CCollider*>(Engine::Get_Component(pLayerTag, pObjTag, L"Com_Collider", Engine::ID_STATIC));
+//	NULL_CHECK_RETURN(pPlayerColliderCom, false);
+//	
+//
+//	if(0 == m_iFlag)
+//		return m_pCalculatorCom->Collision_OBB(pPlayerColliderCom->Get_Min(),
+//											pPlayerColliderCom->Get_Max(),
+//											pPlayerColliderCom->Get_ColliderMatrix(),
+//											m_pColliderCom->Get_Min(),
+//											m_pColliderCom->Get_Max(),
+//											m_pColliderCom->Get_ColliderMatrix());
+//
+//
+//	else
+//		return m_pCalculatorCom->Collision_AABB(pPlayerColliderCom->Get_Min(),
+//											pPlayerColliderCom->Get_Max(),
+//											pPlayerColliderCom->Get_ColliderMatrix(), 
+//											m_pColliderCom->Get_Min(), 
+//											m_pColliderCom->Get_Max(), 
+//											m_pColliderCom->Get_ColliderMatrix());
+//}
 
 CSword* CSword::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrMeshName, const _uint& iFlag)
 {

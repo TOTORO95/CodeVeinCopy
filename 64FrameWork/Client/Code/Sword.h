@@ -43,9 +43,9 @@ private:
 
 	Engine::CTransform*		m_pTransformCom = nullptr;
 	Engine::CRenderer*		m_pRendererCom = nullptr;
-	Engine::CCalculator*	m_pCalculatorCom = nullptr;
+	//Engine::CCalculator*	m_pCalculatorCom = nullptr;
 	Engine::CStaticMesh*	m_pMeshCom = nullptr;
-	Engine::CCollider*		m_pColliderCom = nullptr;
+	//Engine::CCollider*		m_pColliderCom = nullptr;
 	Engine::CShader*		m_pShaderCom = nullptr;
 	wstring					m_wstrMeshName;
 	_uint					m_uiPass = 2;
